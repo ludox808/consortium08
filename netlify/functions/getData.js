@@ -1,5 +1,5 @@
+// Notion API direct
 'use strict';
-// deploy trigger
 
 // ── Constants ──────────────────────────────────────────────────────────────
 const NOTION_API_URL = 'https://api.notion.com/v1';
