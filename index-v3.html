@@ -1500,16 +1500,11 @@ function applyFilters() {
 // FETCH FUNCTIONS  (via Netlify serverless function)
 // ══════════════════════════════════════════════
 
-async function apiFetch(type) {
-  const resp = await fetch(`/api/getData?type=${type}`);
+async function fetchAll() {
+  const resp = await fetch('/api/getData');
   const json = await resp.json();
-  if (!resp.ok) throw new Error(json.error || `HTTP ${resp.status} for type=${type}`);
+  if (!resp.ok) throw new Error(json.error || `HTTP ${resp.status}`);
   return json;
-}
-
-async function fetchOrgs()    { return apiFetch('orgs');    }
-async function fetchMembres() { return apiFetch('membres'); }
-async function fetchLiens()   { return apiFetch('liens');   }
 }
 
 // ══════════════════════════════════════════════
@@ -1527,16 +1522,16 @@ function makeAbbr(name) {
 function mapOrgsData(raw) {
   return raw.map((o, i) => ({
     id:          o.id,
-    name:        o.name        || 'Organisation',
-    abbr:        makeAbbr(o.name),
-    type:        o.type        || '',
-    pilier:      o.pilier      || 'Autres',
-    zone:        o.zone        || 'Liège',
-    etp:         typeof o.etp === 'number' ? o.etp : (parseInt(o.etp) || 0),
-    financement: o.financement || '',
+    name:        o.nom              || 'Organisation',
+    abbr:        makeAbbr(o.nom),
+    type:        o.typeDeStructure  || '',
+    pilier:      o.pilier           || 'Autres',
+    zone:        Array.isArray(o.zonesCouvertes) ? o.zonesCouvertes.join(', ') : (o.zonesCouvertes || ''),
+    etp:         typeof o.nombreETP === 'number' ? o.nombreETP : (parseInt(o.nombreETP) || 0),
+    logo:        o.logo             || null,
+    email:       o.emailDeContact   || '',
     color:       ORG_PALETTE[i % ORG_PALETTE.length],
     bg:          '#1C1B27',
-    desc:        o.desc        || '',
     icon:        'business'
   }));
 }
@@ -1561,18 +1556,19 @@ function mapLinkType(type) {
 function mapMembresData(raw, orgMap) {
   return raw.map(m => {
     const { prenom, nom } = splitNom(m.nom);
-    const org = m.orgId ? orgMap[m.orgId] : null;
+    const orgId = Array.isArray(m.organisationLiee) && m.organisationLiee.length > 0 ? m.organisationLiee[0] : null;
+    const org = orgId ? orgMap[orgId] : null;
     return {
       id:     m.id,
       prenom,
       nom,
-      org:    m.orgId  || null,
+      org:    orgId,
       pilier: org?.pilier || 'Autres',
-      role:   m.role   || m.statut || '',
-      email:  m.email  || '',
-      tel:    m.tel    || '',
-      photo:  m.photo  || null,
-      statut: m.statut || '',
+      role:   m.fonction  || m.statut || '',
+      email:  m.email     || '',
+      tel:    m.telephone || '',
+      photo:  m.photo     || null,
+      statut: m.statut    || '',
       logPos: { x: 0, y: 0 }
     };
   });
@@ -1580,8 +1576,9 @@ function mapMembresData(raw, orgMap) {
 
 function mapLiensData(raw) {
   return raw
-    .filter(l => l.from && l.to && l.from !== l.to)
-    .map(l => ({ from: l.from, to: l.to, type: mapLinkType(l.type) }));
+    .filter(l => Array.isArray(l.source) && l.source.length && Array.isArray(l.cible) && l.cible.length)
+    .map(l => ({ from: l.source[0], to: l.cible[0], type: mapLinkType(l.type) }))
+    .filter(l => l.from !== l.to);
 }
 
 function computeLogPositions(membres) {
@@ -1637,21 +1634,21 @@ async function initApp() {
 
   showLoading();
   try {
-    setStep('orgs', 'active');
-    const rawOrgs = await fetchOrgs();
-    ORGS = mapOrgsData(rawOrgs);
+    setStep('orgs',    'active');
+    setStep('membres', 'active');
+    setStep('liens',   'active');
+
+    const data = await fetchAll();
+
+    ORGS = mapOrgsData(data.organisations || []);
     setStep('orgs', 'done');
 
-    setStep('membres', 'active');
-    const rawMembres = await fetchMembres();
     const orgMap = Object.fromEntries(ORGS.map(o => [o.id, o]));
-    MEMBRES = mapMembresData(rawMembres, orgMap);
+    MEMBRES = mapMembresData(data.members || [], orgMap);
     computeLogPositions(MEMBRES);
     setStep('membres', 'done');
 
-    setStep('liens', 'active');
-    const rawLiens = await fetchLiens();
-    LIENS = mapLiensData(rawLiens);
+    LIENS = mapLiensData(data.liens || []);
     setStep('liens', 'done');
 
     populateFilters();
