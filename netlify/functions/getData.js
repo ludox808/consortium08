@@ -64,10 +64,15 @@ function getFileUrl(props, ...keys) {
 async function queryDatabase(token, databaseId) {
   const pages = [];
   let cursor;
+  let page = 0;
+
+  console.log(`[getData] querying database ${databaseId}`);
 
   do {
+    page++;
     const body = cursor ? { start_cursor: cursor } : {};
-    const resp = await fetch(`${NOTION_API_URL}/databases/${databaseId}/query`, {
+    const url  = `${NOTION_API_URL}/databases/${databaseId}/query`;
+    const resp = await fetch(url, {
       method:  'POST',
       headers: {
         'Authorization':  `Bearer ${token}`,
@@ -78,15 +83,20 @@ async function queryDatabase(token, databaseId) {
     });
 
     if (!resp.ok) {
-      const err = await resp.json().catch(() => ({}));
-      throw new Error(err.message || `Notion API error: HTTP ${resp.status}`);
+      const raw = await resp.text();
+      console.error(`[getData] Notion API ${resp.status} for db=${databaseId} page=${page}: ${raw}`);
+      let msg;
+      try { msg = JSON.parse(raw).message; } catch (_) {}
+      throw new Error(msg || `Notion API error: HTTP ${resp.status} — ${raw.slice(0, 200)}`);
     }
 
     const data = await resp.json();
+    console.log(`[getData] db=${databaseId} page=${page} results=${data.results.length} has_more=${data.has_more}`);
     pages.push(...data.results);
     cursor = data.has_more ? data.next_cursor : undefined;
   } while (cursor);
 
+  console.log(`[getData] db=${databaseId} total pages fetched=${pages.length}`);
   return pages;
 }
 
@@ -158,6 +168,7 @@ exports.handler = async (event) => {
   }
 
   const token = process.env.NOTION_TOKEN || process.env.NOTION_API_KEY;
+  console.log(`[getData] type=${type} token_set=${!!token} token_prefix=${token ? token.slice(0, 8) : 'none'}`);
   if (!token) {
     return {
       statusCode: 500,
