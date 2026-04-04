@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consortium 08 — Annuaire de Santé</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f6ff;
+      --surface: #ffffff;
+      --surface-low: #ecf1ff;
+      --surface-container: #dee8ff;
+      --surface-high: #d5e3ff;
+      --surface-highest: #cdddfe;
+      --border: rgba(162,173,196,0.28);
+      --text: #242f41;
+      --text-muted: #515c70;
+      --primary: #4647d3;
+      --primary-light: #9396ff;
+      --shadow-sm: 0 8px 24px rgba(36,47,65,0.05);
+      --shadow-md: 0 24px 48px rgba(36,47,65,0.07);
+      --shadow-accent: 0 12px 32px rgba(70,71,211,0.22);
+      --gradient: linear-gradient(135deg, #4647d3 0%, #9396ff 100%);
+      --sidebar-w: 280px;
+      --nav-h: 80px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Manrope', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+      user-select: none;
+    }
+
+    /* ── PILL NAVBAR ── */
+    .navbar {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      width: calc(100% - var(--sidebar-w) - 60px);
+      margin-left: calc(var(--sidebar-w) / 2);
+      max-width: 900px;
+      height: 62px;
+      background: rgba(244,246,255,0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 9999px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      gap: 24px;
+    }
+    .navbar-logo {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      white-space: nowrap;
+    }
+    .navbar-logo span { color: var(--primary); }
+    .navbar-tabs { display: flex; align-items: center; gap: 4px; flex: 1; justify-content: center; }
+    .tab {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: color 0.18s, border-color 0.18s;
+      letter-spacing: -0.1px;
+    }
+    .tab:hover { color: var(--primary); }
+    .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .navbar-right { display: flex; align-items: center; gap: 10px; }
+    .view-toggle {
+      display: flex;
+      background: var(--surface-low);
+      border-radius: 9999px;
+      padding: 3px;
+      gap: 2px;
+    }
+    .toggle-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 13px;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.18s, color 0.18s;
+      white-space: nowrap;
+    }
+    .toggle-btn.active { background: var(--surface-highest); color: var(--primary); }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: var(--sidebar-w);
+      height: calc(100vh - 24px);
+      margin: 12px 0;
+      background: var(--surface-highest);
+      border-radius: 0 2.5rem 2.5rem 0;
+      z-index: 150;
+      display: flex;
+      flex-direction: column;
+      padding: 28px 16px 20px;
+      overflow: hidden;
+    }
+    .sidebar-brand {
+      padding: 6px 12px 0;
+      margin-bottom: 20px;
+    }
+    .sidebar-brand-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+    .sidebar-brand-name span { color: var(--primary); }
+    .sidebar-brand-sub {
+      font-size: 10px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      margin-top: 2px;
+      opacity: 0.7;
+    }
+    .sidebar-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.6);
+      border-radius: 9999px;
+      padding: 8px 14px;
+      margin: 0 4px 20px;
+      border: 1px solid rgba(255,255,255,0.8);
+    }
+    .sidebar-search .material-symbols-outlined { font-size: 18px; color: var(--text-muted); flex-shrink: 0; }
+    .sidebar-search input {
+      background: none;
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--text);
+      width: 100%;
+    }
+    .sidebar-search input::placeholder { color: var(--text-muted); opacity: 0.7; }
+    .sidebar-section { margin-bottom: 8px; flex: 1; }
+    .sidebar-section-title {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      padding: 4px 16px 8px;
+      opacity: 0.7;
+    }
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: background 0.15s, color 0.15s, transform 0.15s;
+      opacity: 0.85;
+    }
+    .sidebar-item:hover { background: rgba(255,255,255,0.55); color: var(--text); opacity: 1; transform: translateX(2px); }
+    .sidebar-item.active { background: #ffffff; color: var(--primary); opacity: 1; box-shadow: var(--shadow-sm); }
+    .sidebar-item .material-symbols-outlined { font-size: 18px; }
+    .sidebar-item .sidebar-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .sidebar-bottom {
+      border-top: 1px solid rgba(255,255,255,0.4);
+      padding-top: 10px;
+      margin-top: auto;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      padding: 100px 40px 40px;
+      min-height: 100vh;
+    }
+    .view { display: none; }
+    .view.active { display: block; }
+    .logigramme-view.active { display: flex; flex-direction: column; gap: 14px; }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 32px;
+    }
+    .page-title { font-size: 36px; font-weight: 800; color: var(--text); letter-spacing: -1px; line-height: 1.1; }
+    .page-sub { color: var(--text-muted); font-size: 14px; margin-top: 6px; max-width: 480px; line-height: 1.5; }
+    .page-chips { display: flex; gap: 8px; }
+    .chip {
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── BADGES ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-size: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .results-count { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; }
+
+    /* ── BENTO GRID ── */
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 20px;
+    }
+    .members-grid.compact {
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+    }
+    .bento-featured { grid-column: span 7; }
+    .bento-featured.solo { grid-column: span 12; }
+    .bento-side-stack { grid-column: span 5; display: flex; flex-direction: column; gap: 16px; }
+    .standard-card-wrap { grid-column: span 4; }
+
+    /* ── CARD BASE ── */
+    .stitch-card {
+      background: var(--surface);
+      border-radius: 1.5rem;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.2s;
+      overflow: hidden;
+    }
+    .stitch-card:hover { transform: translateY(-4px); }
+    .stitch-card.no-hover:hover { transform: none; }
+
+    /* ── FEATURED CARD ── */
+    .featured-card {
+      padding: 28px;
+      cursor: pointer;
+    }
+    .featured-card-inner { display: flex; gap: 28px; align-items: flex-start; }
+    .featured-avatar-wrap { position: relative; flex-shrink: 0; }
+    .featured-avatar {
+      width: 160px;
+      height: 200px;
+      border-radius: 1rem;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .featured-avatar-badge {
+      position: absolute;
+      bottom: -10px;
+      right: -10px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: white;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .featured-card-info { flex: 1; min-width: 0; padding-top: 4px; }
+    .featured-name { font-size: 28px; font-weight: 800; color: var(--text); letter-spacing: -0.8px; line-height: 1.1; }
+    .featured-role { font-weight: 700; font-size: 15px; margin-top: 4px; }
+    .featured-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 18px 0;
+    }
+    .stat-box {
+      background: var(--surface-low);
+      border-radius: 14px;
+      padding: 14px 10px;
+      text-align: center;
+    }
+    .stat-value { display: block; font-size: 22px; font-weight: 800; color: var(--primary); line-height: 1; }
+    .stat-label { font-size: 9px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); opacity: 0.65; letter-spacing: 0.06em; margin-top: 4px; display: block; }
+    .gradient-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--gradient);
+      color: white;
+      border: none;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: var(--shadow-accent);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .gradient-btn:hover { opacity: 0.92; transform: scale(1.01); }
+
+    /* ── SIDE CARD ── */
+    .side-card {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      flex: 1;
+    }
+    .side-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 9999px;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid var(--surface-high);
+    }
+    .side-avatar-initials { font-size: 20px; font-weight: 800; }
+    .side-card-info { flex: 1; min-width: 0; }
+    .side-card-name { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+    .side-card-role { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-bottom: 8px; }
+    .side-card-meta { display: flex; gap: 14px; font-size: 12px; color: var(--text-muted); flex-wrap: wrap; }
+    .side-card-meta span { display: flex; align-items: center; gap: 3px; }
+    .side-card-meta .material-symbols-outlined { font-size: 14px; }
+
+    /* ── STANDARD CARD ── */
+    .standard-card {
+      padding: 20px;
+      cursor: pointer;
+    }
+    .std-card-img {
+      width: 100%;
+      height: 130px;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+    .std-card-initials { font-size: 40px; font-weight: 800; }
+    .std-card-name { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 2px; }
+    .std-card-role { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px; }
+    .std-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      margin-top: 10px;
+    }
+    .std-card-conn { font-size: 11px; font-weight: 800; color: var(--text-muted); opacity: 0.65; text-transform: uppercase; letter-spacing: 0.05em; }
+    .icon-btn {
+      width: 30px; height: 30px;
+      background: var(--surface-low);
+      color: var(--primary);
+      border: none;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .icon-btn .material-symbols-outlined { font-size: 15px; }
+
+    /* ── COMPACT CARD ── */
+    .compact-card {
+      background: var(--surface);
+      border-radius: 1rem;
+      box-shadow: var(--shadow-sm);
+      padding: 10px;
+      cursor: pointer;
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+    .compact-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .compact-photo {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+    .compact-initials { font-size: 22px; font-weight: 800; }
+    .compact-org-chip {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 7px;
+      font-weight: 800;
+      color: white;
+      border: 1.5px solid rgba(255,255,255,0.35);
+    }
+    .compact-name { font-size: 11px; font-weight: 700; color: var(--text); text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* ── ORGS LIST ── */
+    .orgs-list { display: flex; flex-direction: column; gap: 10px; }
+    .org-row {
+      background: var(--surface);
+      border-radius: 1.25rem;
+      box-shadow: var(--shadow-sm);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      transition: box-shadow 0.18s, transform 0.18s;
+      border: 1px solid transparent;
+    }
+    .org-row:hover { transform: translateX(4px); box-shadow: var(--shadow-md); border-color: rgba(70,71,211,0.15); }
+    .org-logo { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: white; flex-shrink: 0; }
+    .org-row-info { flex: 1; min-width: 0; }
+    .org-row-name { font-size: 15px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .org-row-type { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .org-row-badges { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .org-row-arrow { color: var(--text-muted); font-size: 22px; margin-left: 4px; flex-shrink: 0; }
+
+    /* ── LOGIGRAMME ── */
+    .logigramme-canvas {
+      background: #0E0D18;
+      border-radius: 1.5rem;
+      overflow: auto;
+      width: 100%;
+      height: 640px;
+      border: 1px solid rgba(42,41,56,0.6);
+      box-shadow: inset 0 4px 24px rgba(0,0,0,0.3);
+    }
+    .logigramme-inner { position: relative; width: 1100px; height: 640px; }
+    .logigramme-svg { position: absolute; top: 0; left: 0; width: 1100px; height: 640px; pointer-events: none; }
+    .log-card {
+      position: absolute;
+      width: 110px;
+      background: #1C1B27;
+      border: 1.5px solid #2A2938;
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .log-card:hover { border-color: #7B6FE8; transform: scale(1.06); box-shadow: 0 8px 28px rgba(0,0,0,0.5); z-index: 10; }
+    .log-card-photo-wrap { position: relative; width: 110px; height: 110px; }
+    .log-card-initials { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; color: #fff; }
+    .log-card-org-logo { position: absolute; bottom: 5px; right: 5px; width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 7px; font-weight: 800; color: #fff; border: 1.5px solid rgba(255,255,255,0.15); }
+    .log-card-name { font-size: 10px; font-weight: 700; color: #E8E7F4; padding: 5px 6px; text-align: center; line-height: 1.3; }
+
+    .logigramme-legend {
+      background: var(--surface);
+      border-radius: 1rem;
+      box-shadow: var(--shadow-sm);
+      padding: 16px 20px;
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .legend-title { font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+    .legend-items { display: flex; gap: 20px; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+    /* ── DRAWER ── */
+    .backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(36,47,65,0.45);
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s;
+    }
+    .backdrop.visible { opacity: 1; pointer-events: all; }
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 390px;
+      height: 100%;
+      background: var(--surface);
+      box-shadow: -8px 0 48px rgba(36,47,65,0.12);
+      z-index: 301;
+      transform: translateX(100%);
+      transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+      display: flex;
+      flex-direction: column;
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      background: var(--surface-low);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .drawer-label { font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+    .drawer-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 22px;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      transition: background 0.15s, color 0.15s;
+      line-height: 1;
+    }
+    .drawer-close:hover { background: var(--surface-container); color: var(--primary); }
+    .drawer-body { flex: 1; overflow-y: auto; padding: 24px; }
+    .drawer-hero { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+    .drawer-avatar {
+      width: 72px; height: 72px; border-radius: 18px;
+      overflow: hidden; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; font-weight: 800;
+    }
+    .drawer-name { font-size: 21px; font-weight: 800; color: var(--text); letter-spacing: -0.4px; line-height: 1.15; }
+    .drawer-sub { font-size: 13px; color: var(--text-muted); margin-top: 4px; line-height: 1.4; font-weight: 500; }
+    .drawer-badges { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+    .drawer-section { margin-bottom: 22px; }
+    .drawer-section-title { font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+    .drawer-field { display: flex; align-items: flex-start; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+    .drawer-field:last-child { border-bottom: none; }
+    .drawer-field-label { color: var(--text-muted); min-width: 80px; flex-shrink: 0; font-weight: 600; padding-top: 1px; }
+    .drawer-field-value { color: var(--text); word-break: break-word; font-weight: 500; }
+    .drawer-desc { font-size: 13px; color: var(--text-muted); line-height: 1.65; margin-bottom: 20px; font-weight: 500; }
+    .connection-list { display: flex; flex-direction: column; gap: 6px; }
+    .connection-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px;
+      background: var(--surface-low);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-size: 13px;
+    }
+    .connection-item:hover { background: var(--surface-container); }
+    .mini-avatar { width: 32px; height: 32px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
+    .connection-info { flex: 1; min-width: 0; }
+    .connection-name { font-weight: 700; color: var(--text); }
+    .connection-type { font-size: 11px; margin-top: 2px; font-weight: 600; }
+    .connection-pip { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .members-mini { display: flex; flex-direction: column; gap: 6px; }
+    .member-mini {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px;
+      background: var(--surface-low);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .member-mini:hover { background: var(--surface-container); }
+    .member-mini-name { font-size: 13px; font-weight: 700; color: var(--text); }
+    .member-mini-role { font-size: 11px; color: var(--text-muted); margin-top: 1px; font-weight: 500; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+    .empty-state-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.35; }
+    .empty-state-text { font-size: 15px; font-weight: 600; }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--surface-container); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--surface-high); }
+
+    /* ── FAB ── */
+    .fab {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 56px;
+      height: 56px;
+      background: var(--gradient);
+      color: white;
+      border: none;
+      border-radius: 9999px;
+      box-shadow: 0 8px 32px rgba(70,71,211,0.4);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .fab:hover { transform: scale(1.1); box-shadow: 0 12px 40px rgba(70,71,211,0.5); }
+    .fab .material-symbols-outlined { font-size: 26px; }
+    .fab-tooltip {
+      position: absolute;
+      right: 66px;
+      background: var(--text);
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 8px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      font-family: 'Manrope', sans-serif;
+    }
+    .fab:hover .fab-tooltip { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<!-- ── FLOATING PILL NAVBAR ── -->
+<nav class="navbar">
+  <div class="navbar-logo">Consortium <span>08</span></div>
+  <div class="navbar-tabs">
+    <button class="tab active" data-view="membres">Membres</button>
+    <button class="tab" data-view="organisations">Organisations</button>
+    <button class="tab" data-view="logigramme">Logigramme</button>
+  </div>
+  <div class="navbar-right">
+    <div class="view-toggle" id="viewToggle">
+      <button class="toggle-btn active" data-mode="detailed">Détaillé</button>
+      <button class="toggle-btn" data-mode="compact">Compact</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── LEFT SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-brand-name">C<span>08</span></div>
+    <div class="sidebar-brand-sub">Réseau de Liège</div>
+  </div>
+
+  <div class="sidebar-search">
+    <span class="material-symbols-outlined">search</span>
+    <input id="filterSearch" type="text" placeholder="Rechercher…">
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Organisations</div>
+    <div id="sidebarOrgs"></div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Pilier</div>
+    <div id="sidebarPiliers"></div>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="sidebar-item">
+      <span class="material-symbols-outlined">help</span>
+      <span>Aide</span>
+    </div>
+  </div>
+</aside>
+
+<!-- Hidden selects for JS filter compatibility -->
+<select id="filterOrg" style="display:none"><option value=""></option></select>
+<select id="filterPilier" style="display:none"><option value=""></option></select>
+
+<!-- ── MAIN CONTENT ── -->
+<main class="main">
+
+  <!-- MEMBRES -->
+  <div class="view active" id="view-membres">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Annuaire des Membres</h1>
+        <p class="page-sub">Explorez les profils et collaborations inter-services au sein du Consortium 08.</p>
+      </div>
+      <div class="page-chips" id="membresChips"></div>
+    </div>
+    <div class="results-count" id="membresCount"></div>
+    <div class="members-grid" id="membresGrid"></div>
+  </div>
+
+  <!-- ORGANISATIONS -->
+  <div class="view" id="view-organisations">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Organisations</h1>
+        <p class="page-sub">Partenaires structurels du réseau de soins palliatifs et d'accompagnement.</p>
+      </div>
+      <div class="page-chips" id="orgsChips"></div>
+    </div>
+    <div class="results-count" id="orgsCount"></div>
+    <div class="orgs-list" id="orgsList"></div>
+  </div>
+
+  <!-- LOGIGRAMME -->
+  <div class="view logigramme-view" id="view-logigramme">
+    <div class="page-header" style="margin-bottom:16px">
+      <div>
+        <h1 class="page-title">Logigramme</h1>
+        <p class="page-sub">Visualisation des connexions entre membres du Consortium.</p>
+      </div>
+    </div>
+    <div class="logigramme-canvas">
+      <div class="logigramme-inner" id="logigrammeInner">
+        <svg class="logigramme-svg" id="logigrammeSvg" viewBox="0 0 1100 640" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+    </div>
+    <div class="logigramme-legend">
+      <span class="legend-title">Légende</span>
+      <div class="legend-items">
+        <div class="legend-item">
+          <svg width="32" height="10"><line x1="0" y1="5" x2="32" y2="5" stroke="#1D9E75" stroke-width="2.5" stroke-linecap="round"/></svg>
+          Collaborent activement
+        </div>
+        <div class="legend-item">
+          <svg width="32" height="10"><line x1="0" y1="5" x2="32" y2="5" stroke="#7B6FE8" stroke-width="2.5" stroke-dasharray="5 3" stroke-linecap="round"/></svg>
+          Se connaissent personnellement
+        </div>
+        <div class="legend-item">
+          <svg width="32" height="10"><line x1="0" y1="5" x2="32" y2="5" stroke="#EF9F27" stroke-width="2.5" stroke-linecap="round"/></svg>
+          Ont déjà collaboré
+        </div>
+        <div class="legend-item">
+          <svg width="32" height="10"><line x1="0" y1="5" x2="32" y2="5" stroke="#4E4D68" stroke-width="2.5" stroke-dasharray="5 3" stroke-linecap="round"/></svg>
+          Organisations en contact
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- BACKDROP + DRAWER -->
+<div class="backdrop" id="backdrop"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <span class="drawer-label" id="drawerLabel">Détails</span>
+    <button class="drawer-close" id="drawerClose">×</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</div>
+
+<!-- FAB -->
+<button class="fab" onclick="switchView('logigramme')">
+  <span class="material-symbols-outlined">share</span>
+  <span class="fab-tooltip">Voir le Logigramme</span>
+</button>
+
+<script>
+// ══════════════════════════════════════════════
+// DATA  (unchanged from index.html)
+// ══════════════════════════════════════════════
+
+const ORGS = [
+  { id:'pallialg',    name:'PalliaLiège',        abbr:'PL', type:'Soins palliatifs',             pilier:'Soins',        zone:'Province de Liège', etp:12,  financement:'INAMI + Fédération Wallonie-Bruxelles', color:'#1D9E75', bg:'#0A2E20', desc:"Plateforme de soins palliatifs de la province de Liège, coordonnant les soins de fin de vie à domicile et en institution.", icon:'favorite' },
+  { id:'hospisoc',    name:'Hospisoc',            abbr:'HS', type:'Accompagnement social',        pilier:'Social',       zone:'Liège',             etp:8,   financement:'SPW Santé + CPAS',                      color:'#534AB7', bg:'#1A1640', desc:"Association d'accompagnement social en soins palliatifs, soutien aux familles et proches aidants.", icon:'diversity_3' },
+  { id:'cpasliege',   name:'CPAS Liège',          abbr:'CL', type:"Centre public d'action sociale",pilier:'Social',      zone:'Liège',             etp:45,  financement:'Commune de Liège',                      color:'#2B7FC7', bg:'#0D2540', desc:"Centre d'action sociale de la Ville de Liège : aide sociale, insertion professionnelle, accompagnement des personnes vulnérables.", icon:'account_balance' },
+  { id:'chrcitadelle',name:'CHR Citadelle',       abbr:'CH', type:'Centre hospitalier régional',  pilier:'Médical',      zone:'Liège',             etp:280, financement:'INAMI + Commune',                       color:'#C74B2B', bg:'#3A1208', desc:"Hôpital régional de Liège avec unité de soins palliatifs, service d'oncologie et médecine interne.", icon:'local_hospital' },
+  { id:'liensoin',    name:'Lien & Soin',         abbr:'LS', type:'Association de soignants',     pilier:'Coordination', zone:'Wallonie',          etp:6,   financement:'Fonds social européen',                 color:'#D4782A', bg:'#3D1F0A', desc:"Réseau de soignants de proximité actifs en soins palliatifs, favorisant la coordination interprofessionnelle.", icon:'hub' },
+  { id:'reseausante', name:'Réseau Santé Liège',  abbr:'RS', type:'Coordination santé',           pilier:'Coordination', zone:'Liège',             etp:15,  financement:'AViQ + INAMI',                          color:'#9B3BC7', bg:'#220D30', desc:"Réseau local de soins intégrés coordonnant les acteurs de santé du bassin liégeois.", icon:'network_node' }
+];
+
+const MEMBRES = [
+  { id:1,  prenom:'Sophie',   nom:'Marchand', org:'pallialg',    pilier:'Soins',        role:'Coordinatrice de soins palliatifs',  email:'sophie.marchand@pallialg.be',    tel:'+32 4 123 45 67', photo:null, logPos:{x:80,  y:75}  },
+  { id:2,  prenom:'Thomas',   nom:'Renard',   org:'chrcitadelle',pilier:'Médical',      role:'Médecin interniste',                 email:'thomas.renard@chrcitadelle.be',  tel:'+32 4 234 56 78', photo:null, logPos:{x:370, y:45}  },
+  { id:3,  prenom:'Marie',    nom:'Dubois',   org:'cpasliege',   pilier:'Social',       role:'Assistante sociale',                 email:'m.dubois@cpasliege.be',          tel:'+32 4 345 67 89', photo:null, logPos:{x:680, y:85}  },
+  { id:4,  prenom:'Pierre',   nom:'Lambert',  org:'pallialg',    pilier:'Soins',        role:'Infirmier coordinateur',             email:'p.lambert@pallialg.be',          tel:'+32 4 456 78 90', photo:null, logPos:{x:55,  y:320} },
+  { id:5,  prenom:'Claire',   nom:'Martin',   org:'hospisoc',    pilier:'Social',       role:'Psychologue',                        email:'claire.martin@hospisoc.be',      tel:'+32 4 567 89 01', photo:null, logPos:{x:300, y:290} },
+  { id:6,  prenom:'Jean',     nom:'Lecomte',  org:'hospisoc',    pilier:'Social',       role:'Directeur',                          email:'j.lecomte@hospisoc.be',          tel:'+32 4 678 90 12', photo:null, logPos:{x:570, y:265} },
+  { id:7,  prenom:'Anne',     nom:'Pirard',   org:'liensoin',    pilier:'Coordination', role:'Coordinatrice réseau',               email:'a.pirard@liensoin.be',           tel:'+32 4 789 01 23', photo:null, logPos:{x:865, y:185} },
+  { id:8,  prenom:'Marc',     nom:'Fontaine', org:'reseausante', pilier:'Coordination', role:'Médecin généraliste référent',       email:'m.fontaine@reseausante.be',      tel:'+32 4 890 12 34', photo:null, logPos:{x:190, y:485} },
+  { id:9,  prenom:'Julie',    nom:'Bastin',   org:'chrcitadelle',pilier:'Médical',      role:'Infirmière en soins palliatifs',     email:'j.bastin@chrcitadelle.be',       tel:'+32 4 901 23 45', photo:null, logPos:{x:470, y:455} },
+  { id:10, prenom:'François', nom:'Dewez',    org:'cpasliege',   pilier:'Social',       role:'Responsable accompagnement',         email:'f.dewez@cpasliege.be',           tel:'+32 4 012 34 56', photo:null, logPos:{x:745, y:430} }
+];
+
+const LIENS = [
+  { from:1, to:2,  type:'collabore' },
+  { from:1, to:4,  type:'collabore' },
+  { from:1, to:5,  type:'connait'   },
+  { from:1, to:7,  type:'ancienne'  },
+  { from:2, to:9,  type:'collabore' },
+  { from:2, to:8,  type:'connait'   },
+  { from:5, to:6,  type:'collabore' },
+  { from:5, to:9,  type:'ancienne'  },
+  { from:3, to:10, type:'collabore' },
+  { from:3, to:7,  type:'connait'   },
+  { from:6, to:8,  type:'connait'   }
+];
+
+const LINK_STYLES = {
+  collabore:   { label:'Collaborent activement',          color:'#1D9E75', dash:false },
+  connait:     { label:'Se connaissent personnellement',  color:'#7B6FE8', dash:true  },
+  ancienne:    { label:'Ont déjà collaboré',              color:'#EF9F27', dash:false },
+  orgscontact: { label:'Organisations en contact',        color:'#4E4D68', dash:true  }
+};
+
+// Light-theme pilier styles (adapted from index.html)
+const PILIER_STYLES = {
+  'Soins':        { bg:'#d5f2e8', color:'#0a6040' },
+  'Social':       { bg:'#ede5ff', color:'#4a1aaa' },
+  'Médical':      { bg:'#dceeff', color:'#1550a0' },
+  'Coordination': { bg:'#feecd5', color:'#8a4a10' },
+  'Prévention':   { bg:'#ffe4f4', color:'#7a2060' }
+};
+
+// ══════════════════════════════════════════════
+// STATE  (unchanged)
+// ══════════════════════════════════════════════
+
+let currentView = 'membres';
+let currentMode = 'detailed';
+let filterOrg = '';
+let filterPilier = '';
+let filterSearch = '';
+
+// ══════════════════════════════════════════════
+// UTILS  (unchanged)
+// ══════════════════════════════════════════════
+
+const getOrg    = id => ORGS.find(o => o.id === id);
+const getMembre = id => MEMBRES.find(m => m.id === id);
+const initials  = (p, n) => (p[0] + n[0]).toUpperCase();
+
+function pilierBadge(pilier) {
+  const s = PILIER_STYLES[pilier] || { bg:'#ecf1ff', color:'#515c70' };
+  return `<span class="badge" style="background:${s.bg};color:${s.color}">${pilier}</span>`;
+}
+
+function orgBadge(org) {
+  if (!org) return '';
+  return `<span class="badge" style="background:${org.color}22;color:${org.color}">${org.name}</span>`;
+}
+
+function getConnectedMembers(id) {
+  return LIENS
+    .filter(l => l.from === id || l.to === id)
+    .map(l => ({ membre: getMembre(l.from === id ? l.to : l.from), type: l.type }))
+    .filter(c => c.membre);
+}
+
+function memberAvatar(m, size=72, radius=18, fontSize=24) {
+  const org = getOrg(m.org);
+  const bg    = org ? org.color + '22' : '#dee8ff';
+  const color = org ? org.color : '#4647d3';
+  if (m.photo) {
+    return `<div style="width:${size}px;height:${size}px;border-radius:${radius}px;overflow:hidden;flex-shrink:0"><img src="${m.photo}" style="width:100%;height:100%;object-fit:cover" alt=""></div>`;
+  }
+  return `<div style="width:${size}px;height:${size}px;border-radius:${radius}px;background:${bg};color:${color};display:flex;align-items:center;justify-content:center;font-size:${fontSize}px;font-weight:800;flex-shrink:0">${initials(m.prenom, m.nom)}</div>`;
+}
+
+// ══════════════════════════════════════════════
+// FILTERS  (unchanged)
+// ══════════════════════════════════════════════
+
+function filteredMembres() {
+  const q = filterSearch.toLowerCase();
+  return MEMBRES.filter(m => {
+    if (filterOrg && m.org !== filterOrg) return false;
+    if (filterPilier && m.pilier !== filterPilier) return false;
+    if (q) {
+      const org = getOrg(m.org);
+      const hay = [m.prenom, m.nom, m.role, m.email, org?.name].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function filteredOrgs() {
+  const q = filterSearch.toLowerCase();
+  return ORGS.filter(o => {
+    if (filterOrg && o.id !== filterOrg) return false;
+    if (filterPilier && o.pilier !== filterPilier) return false;
+    if (q) {
+      const hay = [o.name, o.type, o.pilier, o.zone].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+// ══════════════════════════════════════════════
+// CARD GENERATORS  (Stitch-styled visual output)
+// ══════════════════════════════════════════════
+
+function featuredCard(m, solo) {
+  const org = getOrg(m.org);
+  const connCount = getConnectedMembers(m.id).length;
+  const ini = initials(m.prenom, m.nom);
+  const avBg = org ? org.color + '1e' : '#dee8ff';
+  const avColor = org ? org.color : '#4647d3';
+
+  return `
+    <div class="stitch-card bento-featured${solo ? ' solo' : ''}">
+      <div class="featured-card" onclick="openMemberDrawer(${m.id})">
+        <div class="featured-card-inner">
+          <div class="featured-avatar-wrap">
+            <div class="featured-avatar" style="background:${avBg}">
+              ${m.photo
+                ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover">`
+                : `<div style="font-size:52px;font-weight:800;color:${avColor}">${ini}</div>`
+              }
+            </div>
+            ${org ? `<div class="featured-avatar-badge" style="background:${org.color}">${org.abbr}</div>` : ''}
+          </div>
+          <div class="featured-card-info">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+              <div>
+                <div class="featured-name">${m.prenom} ${m.nom}</div>
+                <div class="featured-role" style="color:${org?.color || '#4647d3'}">${m.role}</div>
+              </div>
+              ${orgBadge(org)}
+            </div>
+            <div class="featured-stats">
+              <div class="stat-box">
+                <span class="stat-value">${connCount}</span>
+                <span class="stat-label">Connexions</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-value">${org?.etp ?? '—'}</span>
+                <span class="stat-label">ETP org.</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-value" style="font-size:13px;padding-top:4px">${m.pilier}</span>
+                <span class="stat-label">Pilier</span>
+              </div>
+            </div>
+            <button class="gradient-btn" onclick="event.stopPropagation();switchView('logigramme')">
+              Voir le Logigramme Collaboratif
+              <span class="material-symbols-outlined" style="font-size:18px">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function sideCard(m) {
+  const org = getOrg(m.org);
+  const connCount = getConnectedMembers(m.id).length;
+  const ini = initials(m.prenom, m.nom);
+  const avBg = org ? org.color + '1e' : '#dee8ff';
+  const avColor = org ? org.color : '#4647d3';
+  return `
+    <div class="stitch-card" style="flex:1">
+      <div class="side-card" onclick="openMemberDrawer(${m.id})">
+        <div class="side-avatar" style="background:${avBg};border-color:${org?.color+'22'||'#dee8ff'}">
+          ${m.photo
+            ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover">`
+            : `<div class="side-avatar-initials" style="color:${avColor}">${ini}</div>`
+          }
+        </div>
+        <div class="side-card-info">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div class="side-card-name">${m.prenom} ${m.nom}</div>
+            ${orgBadge(org)}
+          </div>
+          <div class="side-card-role">${m.role}</div>
+          <div class="side-card-meta">
+            <span><span class="material-symbols-outlined">hub</span>${connCount} connexion${connCount!==1?'s':''}</span>
+            <span><span class="material-symbols-outlined">location_on</span>${org?.zone||'Liège'}</span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function standardCard(m) {
+  const org = getOrg(m.org);
+  const connCount = getConnectedMembers(m.id).length;
+  const ini = initials(m.prenom, m.nom);
+  const avBg = org ? org.color + '1e' : '#dee8ff';
+  const avColor = org ? org.color : '#4647d3';
+  return `
+    <div class="stitch-card standard-card-wrap">
+      <div class="standard-card" onclick="openMemberDrawer(${m.id})">
+        <div class="std-card-img" style="background:${avBg}">
+          ${m.photo
+            ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover">`
+            : `<div class="std-card-initials" style="color:${avColor}">${ini}</div>`
+          }
+        </div>
+        <div class="std-card-name">${m.prenom} ${m.nom}</div>
+        <div class="std-card-role" style="color:${org?.color||'#4647d3'}">${m.role}</div>
+        ${orgBadge(org)}
+        <div class="std-card-footer">
+          <span class="std-card-conn">${connCount} connexion${connCount!==1?'s':''}</span>
+          <button class="icon-btn" onclick="event.stopPropagation();openMemberDrawer(${m.id})">
+            <span class="material-symbols-outlined">link</span>
+          </button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function compactCard(m) {
+  const org = getOrg(m.org);
+  const ini = initials(m.prenom, m.nom);
+  const avBg = org ? org.color + '1e' : '#dee8ff';
+  const avColor = org ? org.color : '#4647d3';
+  return `
+    <div class="compact-card" onclick="openMemberDrawer(${m.id})">
+      <div class="compact-photo" style="background:${avBg}">
+        ${m.photo
+          ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover">`
+          : `<div class="compact-initials" style="color:${avColor}">${ini}</div>`
+        }
+        ${org ? `<div class="compact-org-chip" style="background:${org.color}">${org.abbr}</div>` : ''}
+      </div>
+      <div class="compact-name">${m.prenom} ${m.nom}</div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════
+// RENDER MEMBRES
+// ══════════════════════════════════════════════
+
+function renderMembres() {
+  const grid    = document.getElementById('membresGrid');
+  const countEl = document.getElementById('membresCount');
+  const list    = filteredMembres();
+
+  countEl.textContent = `${list.length} membre${list.length !== 1 ? 's' : ''}`;
+
+  if (!list.length) {
+    grid.className = 'members-grid';
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">🔍</div><div class="empty-state-text">Aucun membre ne correspond aux filtres.</div></div>`;
+    return;
+  }
+
+  if (currentMode === 'compact') {
+    grid.className = 'members-grid compact';
+    grid.innerHTML = list.map(m => compactCard(m)).join('');
+    return;
+  }
+
+  // Bento detailed mode
+  grid.className = 'members-grid';
+  let html = '';
+
+  // Featured (first member)
+  html += featuredCard(list[0], list.length === 1);
+
+  // Side stack (members 1 & 2)
+  if (list.length > 1) {
+    const sideMembers = list.slice(1, Math.min(3, list.length));
+    html += `<div class="bento-side-stack">${sideMembers.map(m => sideCard(m)).join('')}</div>`;
+  }
+
+  // Standard cards (members 3+)
+  list.slice(3).forEach(m => { html += standardCard(m); });
+
+  grid.innerHTML = html;
+}
+
+// ══════════════════════════════════════════════
+// RENDER ORGANISATIONS
+// ══════════════════════════════════════════════
+
+function renderOrgs() {
+  const list    = document.getElementById('orgsList');
+  const countEl = document.getElementById('orgsCount');
+  const orgs    = filteredOrgs();
+
+  countEl.textContent = `${orgs.length} organisation${orgs.length !== 1 ? 's' : ''}`;
+
+  if (!orgs.length) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-text">Aucune organisation ne correspond aux filtres.</div></div>`;
+    return;
+  }
+
+  list.innerHTML = orgs.map(org => {
+    const count = MEMBRES.filter(m => m.org === org.id).length;
+    const ps = PILIER_STYLES[org.pilier] || { bg:'#ecf1ff', color:'#515c70' };
+    return `
+      <div class="org-row" onclick="openOrgDrawer('${org.id}')">
+        <div class="org-logo" style="background:${org.color}">${org.abbr}</div>
+        <div class="org-row-info">
+          <div class="org-row-name">${org.name}</div>
+          <div class="org-row-type">${org.type}</div>
+        </div>
+        <div class="org-row-badges">
+          <span class="badge" style="background:${ps.bg};color:${ps.color}">${org.pilier}</span>
+          <span class="badge" style="background:#ecf1ff;color:#515c70">📍 ${org.zone}</span>
+          <span class="badge" style="background:#ecf1ff;color:#515c70">⚡ ${org.etp} ETP</span>
+          <span class="badge" style="background:#ecf1ff;color:#515c70">👥 ${count} membre${count!==1?'s':''}</span>
+        </div>
+        <span class="org-row-arrow">›</span>
+      </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// RENDER LOGIGRAMME  (unchanged logic, dark canvas)
+// ══════════════════════════════════════════════
+
+function renderLogigramme() {
+  const inner = document.getElementById('logigrammeInner');
+  const svg   = document.getElementById('logigrammeSvg');
+  const HALF  = 55;
+
+  inner.querySelectorAll('.log-card').forEach(el => el.remove());
+
+  svg.innerHTML = LIENS.map(lien => {
+    const from = getMembre(lien.from);
+    const to   = getMembre(lien.to);
+    if (!from || !to) return '';
+    const ls   = LINK_STYLES[lien.type] || LINK_STYLES.collabore;
+    const x1   = from.logPos.x + HALF, y1 = from.logPos.y + HALF;
+    const x2   = to.logPos.x   + HALF, y2 = to.logPos.y   + HALF;
+    const dash = ls.dash ? `stroke-dasharray="7 4"` : '';
+    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${ls.color}" stroke-width="2" ${dash} opacity="0.7" stroke-linecap="round"/>`;
+  }).join('');
+
+  MEMBRES.forEach(m => {
+    const org      = getOrg(m.org);
+    const ini      = initials(m.prenom, m.nom);
+    const photoBg  = org ? org.color + '28' : '#2A2938';
+    const photoColor = org ? org.color : '#E8E7F4';
+
+    const card = document.createElement('div');
+    card.className = 'log-card';
+    card.style.left = m.logPos.x + 'px';
+    card.style.top  = m.logPos.y + 'px';
+    card.onclick = () => openMemberDrawer(m.id);
+    card.innerHTML = `
+      <div class="log-card-photo-wrap">
+        ${m.photo
+          ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover;display:block" alt="">`
+          : `<div class="log-card-initials" style="background:${photoBg};color:${photoColor}">${ini}</div>`
+        }
+        ${org ? `<div class="log-card-org-logo" style="background:${org.color}">${org.abbr}</div>` : ''}
+      </div>
+      <div class="log-card-name">${m.prenom}<br>${m.nom}</div>`;
+    inner.appendChild(card);
+  });
+}
+
+// ══════════════════════════════════════════════
+// DRAWER — MEMBRE  (light theme)
+// ══════════════════════════════════════════════
+
+function openMemberDrawer(id) {
+  const m = getMembre(id);
+  if (!m) return;
+  const org = getOrg(m.org);
+  const connections = getConnectedMembers(m.id);
+
+  document.getElementById('drawerLabel').textContent = 'Fiche membre';
+  document.getElementById('drawerBody').innerHTML = `
+    <div class="drawer-hero">
+      ${memberAvatar(m, 72, 18, 24)}
+      <div>
+        <div class="drawer-name">${m.prenom} ${m.nom}</div>
+        <div class="drawer-sub">${m.role}</div>
+        <div class="drawer-badges">${orgBadge(org)}${pilierBadge(m.pilier)}</div>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Coordonnées</div>
+      <div class="drawer-field">
+        <span class="drawer-field-label">Email</span>
+        <span class="drawer-field-value">${m.email}</span>
+      </div>
+      <div class="drawer-field">
+        <span class="drawer-field-label">Téléphone</span>
+        <span class="drawer-field-value">${m.tel}</span>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Connexions (${connections.length})</div>
+      <div class="connection-list">
+        ${connections.length === 0
+          ? `<p style="font-size:13px;color:var(--text-muted);font-weight:500">Aucune connexion renseignée.</p>`
+          : connections.map(c => {
+              const co    = getOrg(c.membre.org);
+              const ls    = LINK_STYLES[c.type] || LINK_STYLES.collabore;
+              const avBg  = co ? co.color + '22' : '#dee8ff';
+              const avColor = co ? co.color : '#4647d3';
+              return `
+                <div class="connection-item" onclick="openMemberDrawer(${c.membre.id})">
+                  <div class="mini-avatar" style="background:${avBg};color:${avColor}">${initials(c.membre.prenom, c.membre.nom)}</div>
+                  <div class="connection-info">
+                    <div class="connection-name">${c.membre.prenom} ${c.membre.nom}</div>
+                    <div class="connection-type" style="color:${ls.color}">${ls.label}</div>
+                  </div>
+                  <div class="connection-pip" style="background:${ls.color}"></div>
+                </div>`;
+            }).join('')
+        }
+      </div>
+    </div>`;
+
+  openDrawer();
+}
+
+// ══════════════════════════════════════════════
+// DRAWER — ORGANISATION  (light theme)
+// ══════════════════════════════════════════════
+
+function openOrgDrawer(id) {
+  const org = getOrg(id);
+  if (!org) return;
+  const orgMembres = MEMBRES.filter(m => m.org === id);
+  const ps = PILIER_STYLES[org.pilier] || { bg:'#ecf1ff', color:'#515c70' };
+
+  document.getElementById('drawerLabel').textContent = 'Fiche organisation';
+  document.getElementById('drawerBody').innerHTML = `
+    <div class="drawer-hero">
+      <div style="width:72px;height:72px;border-radius:18px;background:${org.color};display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#fff;flex-shrink:0">${org.abbr}</div>
+      <div>
+        <div class="drawer-name">${org.name}</div>
+        <div class="drawer-sub">${org.type}</div>
+        <div class="drawer-badges"><span class="badge" style="background:${ps.bg};color:${ps.color}">${org.pilier}</span></div>
+      </div>
+    </div>
+
+    <p class="drawer-desc">${org.desc}</p>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Informations</div>
+      <div class="drawer-field">
+        <span class="drawer-field-label">Zone</span>
+        <span class="drawer-field-value">${org.zone}</span>
+      </div>
+      <div class="drawer-field">
+        <span class="drawer-field-label">ETP</span>
+        <span class="drawer-field-value">${org.etp}</span>
+      </div>
+      <div class="drawer-field">
+        <span class="drawer-field-label">Financement</span>
+        <span class="drawer-field-value">${org.financement}</span>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Membres dans le Consortium (${orgMembres.length})</div>
+      <div class="members-mini">
+        ${orgMembres.length === 0
+          ? `<p style="font-size:13px;color:var(--text-muted);font-weight:500">Aucun membre renseigné.</p>`
+          : orgMembres.map(m => `
+              <div class="member-mini" onclick="openMemberDrawer(${m.id})">
+                <div class="mini-avatar" style="background:${org.color}22;color:${org.color}">${initials(m.prenom, m.nom)}</div>
+                <div>
+                  <div class="member-mini-name">${m.prenom} ${m.nom}</div>
+                  <div class="member-mini-role">${m.role}</div>
+                </div>
+              </div>`).join('')
+        }
+      </div>
+    </div>`;
+
+  openDrawer();
+}
+
+function openDrawer() {
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('backdrop').classList.add('visible');
+}
+
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('backdrop').classList.remove('visible');
+}
+
+// ══════════════════════════════════════════════
+// VIEW SWITCHING  (unchanged)
+// ══════════════════════════════════════════════
+
+function switchView(view) {
+  currentView = view;
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.view === view));
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + view));
+  document.getElementById('viewToggle').style.display = view === 'membres' ? 'flex' : 'none';
+
+  if (view === 'membres')            renderMembres();
+  else if (view === 'organisations') renderOrgs();
+  else if (view === 'logigramme')    renderLogigramme();
+}
+
+// ══════════════════════════════════════════════
+// POPULATE FILTERS  (unchanged)
+// ══════════════════════════════════════════════
+
+function populateFilters() {
+  const orgSel = document.getElementById('filterOrg');
+  ORGS.forEach(o => {
+    const opt = document.createElement('option');
+    opt.value = o.id;
+    opt.textContent = o.name;
+    orgSel.appendChild(opt);
+  });
+
+  const pilierSel = document.getElementById('filterPilier');
+  const piliers = [...new Set([...MEMBRES.map(m => m.pilier), ...ORGS.map(o => o.pilier)])].sort();
+  piliers.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p;
+    opt.textContent = p;
+    pilierSel.appendChild(opt);
+  });
+}
+
+// ══════════════════════════════════════════════
+// BUILD SIDEBAR  (new — UI glue for left sidebar)
+// ══════════════════════════════════════════════
+
+function buildSidebar() {
+  buildSidebarGroup(
+    document.getElementById('sidebarOrgs'),
+    'filterOrg',
+    [{ label: 'Toutes', value: '', icon: 'groups' },
+     ...ORGS.map(o => ({ label: o.name, value: o.id, icon: o.icon, color: o.color }))],
+    true
+  );
+  buildSidebarGroup(
+    document.getElementById('sidebarPiliers'),
+    'filterPilier',
+    [{ label: 'Tous', value: '', icon: 'category' },
+     ...([...new Set(MEMBRES.map(m => m.pilier))].sort().map(p => ({ label: p, value: p, icon: 'label' })))],
+    false
+  );
+}
+
+function buildSidebarGroup(container, selectId, items, showDot) {
+  container.innerHTML = '';
+  items.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'sidebar-item' + (item.value === '' ? ' active' : '');
+    el.innerHTML = showDot && item.color
+      ? `<div class="sidebar-dot" style="background:${item.color}"></div><span>${item.label}</span>`
+      : `<span class="material-symbols-outlined">${item.icon}</span><span>${item.label}</span>`;
+
+    el.addEventListener('click', () => {
+      container.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById(selectId).value = item.value;
+      applyFilters();
+    });
+    container.appendChild(el);
+  });
+}
+
+// ══════════════════════════════════════════════
+// APPLY FILTERS  (unchanged)
+// ══════════════════════════════════════════════
+
+function applyFilters() {
+  filterOrg    = document.getElementById('filterOrg').value;
+  filterPilier = document.getElementById('filterPilier').value;
+  filterSearch = document.getElementById('filterSearch').value.trim();
+  if (currentView === 'membres')            renderMembres();
+  else if (currentView === 'organisations') renderOrgs();
+}
+
+// ══════════════════════════════════════════════
+// EVENTS  (unchanged)
+// ══════════════════════════════════════════════
+
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => switchView(t.dataset.view)));
+
+document.querySelectorAll('.toggle-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentMode = btn.dataset.mode;
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === currentMode));
+    renderMembres();
+  });
+});
+
+document.getElementById('filterSearch').addEventListener('input', applyFilters);
+document.getElementById('backdrop').addEventListener('click', closeDrawer);
+document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+
+populateFilters();
+buildSidebar();
+renderMembres();
+</script>
+</body>
+</html>

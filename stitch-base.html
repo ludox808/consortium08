@@ -1,0 +1,342 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.3">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;html class="light" lang="fr"&gt;&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="utf-8"/&gt;</p>
+<p class="p1">&lt;meta content="width=device-width, initial-scale=1.0" name="viewport"/&gt;</p>
+<p class="p1">&lt;title&gt;Consortium 08 - Annuaire de Santé&lt;/title&gt;</p>
+<p class="p1">&lt;script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"&gt;&lt;/script&gt;</p>
+<p class="p1">&lt;link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;amp;display=swap" rel="stylesheet"/&gt;</p>
+<p class="p1">&lt;link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;amp;display=swap" rel="stylesheet"/&gt;</p>
+<p class="p1">&lt;link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;amp;display=swap" rel="stylesheet"/&gt;</p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.material-symbols-outlined {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.bg-soft-tech-gradient {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #4647d3 0%, #9396ff 100%);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.glass-header {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>backdrop-filter: blur(20px);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>-webkit-backdrop-filter: blur(20px);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Custom collaboration lines logic */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.collab-line-primary {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-bottom: 2px dashed #4647d3;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;script id="tailwind-config"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>tailwind.config = {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>darkMode: "class",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>theme: {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>extend: {</p>
+<p class="p1"><span class="Apple-converted-space">              </span>"colors": {</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"error-dim": "#a70138",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"tertiary-fixed-dim": "#ef81c4",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"secondary-container": "#dcc9ff",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"surface-container-lowest": "#ffffff",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"on-secondary-fixed": "#430097",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"on-error": "#ffefef",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"surface": "#f4f6ff",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"on-primary-fixed": "#000000",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"on-primary-container": "#0a0081",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"primary-dim": "#3939c7",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"surface-dim": "#c3d5f8",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"primary-fixed-dim": "#8387ff",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"surface-container-high": "#d5e3ff",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"inverse-primary": "#8083ff",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"on-tertiary-fixed-variant": "#6e1354",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"error": "#b41340",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"on-secondary-container": "#5b00c7",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"surface-container-highest": "#cdddfe",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"outline-variant": "#a2adc4",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"on-background": "#242f41",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"surface-bright": "#f4f6ff",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"on-secondary-fixed-variant": "#6514d6",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"inverse-on-surface": "#929db4",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"tertiary-container": "#ff8ed2",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"outline": "#6c778c",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"surface-container": "#dee8ff",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"on-tertiary": "#ffeef4",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"on-tertiary-container": "#63054a",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"tertiary": "#963776",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"primary-container": "#9396ff",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"on-primary": "#f4f1ff",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"background": "#f4f6ff",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"tertiary-fixed": "#ff8ed2",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"surface-container-low": "#ecf1ff",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"surface-variant": "#cdddfe",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"error-container": "#f74b6d",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"on-surface-variant": "#515c70",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"secondary-fixed": "#dcc9ff",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"on-secondary": "#f8f0ff",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"tertiary-dim": "#882a69",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"secondary-dim": "#6411d5",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"primary": "#4647d3",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"on-primary-fixed-variant": "#0e009d",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"on-tertiary-fixed": "#3b002b",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"secondary-fixed-dim": "#d0b8ff",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"inverse-surface": "#040e1f",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"on-surface": "#242f41",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"secondary": "#702ae1",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"primary-fixed": "#9396ff",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"surface-tint": "#4647d3",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"on-error-container": "#510017"</p>
+<p class="p1"><span class="Apple-converted-space">              </span>},</p>
+<p class="p1"><span class="Apple-converted-space">              </span>"borderRadius": {</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"DEFAULT": "1rem",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"lg": "2rem",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"xl": "3rem",</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"full": "9999px"</p>
+<p class="p1"><span class="Apple-converted-space">              </span>},</p>
+<p class="p1"><span class="Apple-converted-space">              </span>"fontFamily": {</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"headline": ["Manrope"],</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"body": ["Manrope"],</p>
+<p class="p1"><span class="Apple-converted-space">                      </span>"label": ["Manrope"]</p>
+<p class="p1"><span class="Apple-converted-space">              </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>},</p>
+<p class="p1"><span class="Apple-converted-space">          </span>},</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body class="bg-surface font-body text-on-surface min-h-screen"&gt;</p>
+<p class="p1">&lt;!-- TopNavBar --&gt;</p>
+<p class="p1">&lt;nav class="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-8 h-20 max-w-7xl mx-auto w-[95%] bg-[#f4f6ff]/80 dark:bg-slate-950/80 backdrop-blur-xl rounded-full mt-4 shadow-[0px_24px_48px_rgba(36,47,65,0.06)] font-manrope tracking-tight leading-relaxed"&gt;</p>
+<p class="p1">&lt;div class="flex items-center gap-6"&gt;</p>
+<p class="p1">&lt;span class="text-2xl font-bold tracking-tighter text-[#242f41] dark:text-[#f4f6ff]"&gt;Consortium 08&lt;/span&gt;</p>
+<p class="p1">&lt;div class="hidden md:flex gap-8 ml-8"&gt;</p>
+<p class="p1">&lt;a class="text-[#6366F1] font-bold border-b-2 border-[#6366F1] pb-1 hover:text-[#6366F1] transition-colors duration-300" href="#"&gt;Membres&lt;/a&gt;</p>
+<p class="p1">&lt;a class="text-[#515c70] dark:text-[#a2adc4] font-medium hover:text-[#6366F1] transition-colors duration-300" href="#"&gt;Organisations&lt;/a&gt;</p>
+<p class="p1">&lt;a class="text-[#515c70] dark:text-[#a2adc4] font-medium hover:text-[#6366F1] transition-colors duration-300" href="#"&gt;Logigramme&lt;/a&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="flex items-center gap-4"&gt;</p>
+<p class="p1">&lt;button class="bg-surface-container-low text-primary px-5 py-2 rounded-full font-semibold text-sm scale-95 active:scale-90 transition-transform"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>Détaillé / Compact</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
+<p class="p1">&lt;div class="flex gap-2"&gt;</p>
+<p class="p1">&lt;button class="p-2 text-on-surface-variant hover:text-primary transition-colors"&gt;</p>
+<p class="p1">&lt;span class="material-symbols-outlined" data-icon="settings"&gt;settings&lt;/span&gt;</p>
+<p class="p1">&lt;/button&gt;</p>
+<p class="p1">&lt;button class="p-2 text-on-surface-variant hover:text-primary transition-colors"&gt;</p>
+<p class="p1">&lt;span class="material-symbols-outlined" data-icon="notifications"&gt;notifications&lt;/span&gt;</p>
+<p class="p1">&lt;/button&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container"&gt;</p>
+<p class="p1">&lt;img alt="User profile" data-alt="professional portrait of a healthcare administrator in a bright modern office setting, wearing a white coat and stethoscope" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWcw96PkphhuvRSM2M4NWyuTCN04CtSaC5E_IHKlx5OJ8f1dpMMosCQzjQtqhuXo_I7zHQ8_ZoxGeXSTTbNeEAJvWI72r7__tSezzUFR2vexLWPW6IEvAiovnY3HHZx2b_b7Visy-mk40PICvuaEFtjxwgVFCUaW8lBwFt1MdEJkBLnWKCODWGUdjwVJ8I3NBul7kTdZicxvICW2s9KNa3IzRKe3bMuTFaXU3LOVKqarmD9c97Fu2gyQ4qjGZSMzKqebGZRzrsHEI"/&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/nav&gt;</p>
+<p class="p1">&lt;!-- SideNavBar (Filter Panel) --&gt;</p>
+<p class="p1">&lt;aside class="fixed left-0 top-0 w-72 flex flex-col p-6 z-40 bg-[#cdddfe] dark:bg-slate-900 rounded-r-[3rem] h-[calc(100vh-2rem)] my-4 shadow-sm font-manrope text-sm uppercase tracking-widest"&gt;</p>
+<p class="p1">&lt;div class="mt-20 mb-8 px-4"&gt;</p>
+<p class="p1">&lt;h2 class="text-lg font-black text-[#242f41] dark:text-[#f4f6ff] mb-1"&gt;Filtres&lt;/h2&gt;</p>
+<p class="p1">&lt;p class="text-[10px] text-on-surface-variant opacity-70"&gt;Réseau de Liège&lt;/p&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="flex flex-col gap-2 flex-grow"&gt;</p>
+<p class="p1">&lt;div class="bg-[#ffffff] dark:bg-slate-800 text-[#6366F1] rounded-full shadow-sm p-4 flex items-center gap-4 translate-x-1 duration-200 cursor-pointer"&gt;</p>
+<p class="p1">&lt;span class="material-symbols-outlined" data-icon="medical_services"&gt;medical_services&lt;/span&gt;</p>
+<p class="p1">&lt;span class="font-bold"&gt;PalliaLiège&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="text-[#515c70] dark:text-[#a2adc4] opacity-80 hover:bg-[#ecf1ff] dark:hover:bg-slate-800/50 transition-all p-4 flex items-center gap-4 rounded-full cursor-pointer"&gt;</p>
+<p class="p1">&lt;span class="material-symbols-outlined" data-icon="diversity_3"&gt;diversity_3&lt;/span&gt;</p>
+<p class="p1">&lt;span&gt;Hospisoc&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="text-[#515c70] dark:text-[#a2adc4] opacity-80 hover:bg-[#ecf1ff] dark:hover:bg-slate-800/50 transition-all p-4 flex items-center gap-4 rounded-full cursor-pointer"&gt;</p>
+<p class="p1">&lt;span class="material-symbols-outlined" data-icon="account_balance"&gt;account_balance&lt;/span&gt;</p>
+<p class="p1">&lt;span&gt;Organisations&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;button class="mt-6 mx-4 py-3 bg-soft-tech-gradient text-white rounded-full font-bold flex items-center justify-center gap-2 shadow-lg shadow-primary/20"&gt;</p>
+<p class="p1">&lt;span class="material-symbols-outlined text-sm" data-icon="add"&gt;add&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>Ajouter Filtre</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="mt-auto border-t border-outline-variant/10 pt-4 flex flex-col gap-2"&gt;</p>
+<p class="p1">&lt;div class="text-[#515c70] p-4 flex items-center gap-4 hover:text-primary cursor-pointer"&gt;</p>
+<p class="p1">&lt;span class="material-symbols-outlined" data-icon="help"&gt;help&lt;/span&gt;</p>
+<p class="p1">&lt;span&gt;Aide&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="text-error p-4 flex items-center gap-4 hover:bg-error-container/10 rounded-full cursor-pointer"&gt;</p>
+<p class="p1">&lt;span class="material-symbols-outlined" data-icon="logout"&gt;logout&lt;/span&gt;</p>
+<p class="p1">&lt;span&gt;Déconnexion&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/aside&gt;</p>
+<p class="p1">&lt;!-- Main Content Canvas --&gt;</p>
+<p class="p1">&lt;main class="ml-80 pt-32 p-8 pr-12 min-h-screen overflow-x-hidden"&gt;</p>
+<p class="p1">&lt;!-- Dashboard Header --&gt;</p>
+<p class="p1">&lt;header class="mb-12 flex justify-between items-end"&gt;</p>
+<p class="p1">&lt;div&gt;</p>
+<p class="p1">&lt;h1 class="text-4xl font-extrabold tracking-tighter text-on-surface mb-2"&gt;Annuaire des Membres&lt;/h1&gt;</p>
+<p class="p1">&lt;p class="text-on-surface-variant max-w-xl"&gt;Explorez les collaborations inter-services et les profils spécialisés au sein du consortium de santé 08.&lt;/p&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="flex gap-2"&gt;</p>
+<p class="p1">&lt;span class="px-4 py-1.5 bg-secondary-container text-on-secondary-container rounded-full text-xs font-bold uppercase tracking-widest"&gt;48 Actifs&lt;/span&gt;</p>
+<p class="p1">&lt;span class="px-4 py-1.5 bg-surface-container-highest text-primary rounded-full text-xs font-bold uppercase tracking-widest"&gt;Connecté&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/header&gt;</p>
+<p class="p1">&lt;!-- Bento Grid Layout for Members --&gt;</p>
+<p class="p1">&lt;div class="grid grid-cols-12 gap-8 relative"&gt;</p>
+<p class="p1">&lt;!-- Collaborative Visualization Lines (Decorative abstraction) --&gt;</p>
+<p class="p1">&lt;div class="absolute top-[20%] left-[30%] w-[40%] h-[2px] bg-primary/10 -rotate-12 z-0 hidden lg:block"&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;div class="absolute top-[50%] left-[10%] w-[60%] h-[2px] bg-secondary/10 rotate-6 z-0 hidden lg:block"&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;!-- Featured Member Card (Large) --&gt;</p>
+<p class="p1">&lt;div class="col-span-12 lg:col-span-7 bg-surface-container-lowest rounded-xl p-8 shadow-[0px_24px_48px_rgba(36,47,65,0.06)] relative z-10 transition-transform hover:scale-[1.01]"&gt;</p>
+<p class="p1">&lt;div class="flex flex-col md:flex-row gap-8"&gt;</p>
+<p class="p1">&lt;div class="relative"&gt;</p>
+<p class="p1">&lt;div class="w-48 h-64 rounded-lg overflow-hidden"&gt;</p>
+<p class="p1">&lt;img alt="Dr. Sophie Martin" class="w-full h-full object-cover" data-alt="close-up of a female doctor in a blue scrubs looking warmly at the camera, soft natural lighting in a clinic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpiBb1ZgFhqJz9lu9c6GWGBHi_YdSxu1bHxpN3MsjiOWFq2gB4n3ThjlrVHe1CVslXe-5O3vsYTOcCppDvEq24pCTqkOCuMsDyVkVT1ZL4n7zqgHH9685K67RhPNuUlC0XcD5j8x1c3IY8jkXkTTLBLPLVWZAhogQY63ZS1IsOS50gTGNiSVF0ohdq48LJTrY55tq1Yx9Gqg-6dMTQ5ZH-C5h-DeZSyvZBCd-QkijisZ3PnySKnnqEKtp3JlzZnSUgskid4VN97sg"/&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="absolute -bottom-4 -right-4 bg-primary text-white p-4 rounded-xl shadow-xl"&gt;</p>
+<p class="p1">&lt;span class="material-symbols-outlined text-4xl" data-icon="medical_information"&gt;medical_information&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="flex-1"&gt;</p>
+<p class="p1">&lt;div class="flex justify-between items-start mb-4"&gt;</p>
+<p class="p1">&lt;div&gt;</p>
+<p class="p1">&lt;h3 class="text-3xl font-extrabold text-on-surface tracking-tighter"&gt;Sophie Martin&lt;/h3&gt;</p>
+<p class="p1">&lt;p class="text-primary font-bold text-lg"&gt;Coordinateur de Soins Palliatifs&lt;/p&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;span class="px-4 py-1 bg-surface-container-highest text-primary rounded-full text-[10px] font-black uppercase tracking-wider"&gt;PalliaLiège&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;p class="text-on-surface-variant mb-6 leading-relaxed"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>Spécialisée dans la coordination interdisciplinaire et l'accompagnement des familles. Gère les flux de communication entre les hôpitaux partenaires et les soins à domicile.</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/p&gt;</p>
+<p class="p1">&lt;div class="grid grid-cols-3 gap-4 mb-6"&gt;</p>
+<p class="p1">&lt;div class="bg-surface-container-low p-4 rounded-xl text-center"&gt;</p>
+<p class="p1">&lt;span class="block text-2xl font-black text-primary"&gt;120&lt;/span&gt;</p>
+<p class="p1">&lt;span class="text-[10px] uppercase font-bold text-on-surface-variant opacity-60"&gt;Connexions&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="bg-surface-container-low p-4 rounded-xl text-center"&gt;</p>
+<p class="p1">&lt;span class="block text-2xl font-black text-primary"&gt;14&lt;/span&gt;</p>
+<p class="p1">&lt;span class="text-[10px] uppercase font-bold text-on-surface-variant opacity-60"&gt;Projets&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="bg-surface-container-low p-4 rounded-xl text-center"&gt;</p>
+<p class="p1">&lt;span class="block text-2xl font-black text-primary"&gt;8.5&lt;/span&gt;</p>
+<p class="p1">&lt;span class="text-[10px] uppercase font-bold text-on-surface-variant opacity-60"&gt;Années Exp.&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;button class="w-full py-4 bg-soft-tech-gradient text-white rounded-full font-bold shadow-lg shadow-primary/20 hover:shadow-xl transition-all flex justify-center items-center gap-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>Voir le Logigramme Collaboratif</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="material-symbols-outlined" data-icon="arrow_forward"&gt;arrow_forward&lt;/span&gt;</p>
+<p class="p1">&lt;/button&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;!-- Side Cards (Smaller) --&gt;</p>
+<p class="p1">&lt;div class="col-span-12 lg:col-span-5 grid grid-cols-1 gap-8"&gt;</p>
+<p class="p1">&lt;!-- Member 2 --&gt;</p>
+<p class="p1">&lt;div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_24px_48px_rgba(36,47,65,0.06)] flex items-center gap-6 group hover:bg-surface-container-low transition-all"&gt;</p>
+<p class="p1">&lt;div class="w-24 h-24 rounded-full overflow-hidden flex-shrink-0 border-4 border-surface-container-high transition-transform group-hover:scale-105"&gt;</p>
+<p class="p1">&lt;img alt="Jean Dupont" class="w-full h-full object-cover" data-alt="middle aged male healthcare specialist with glasses in a modern medical environment, professional soft bokeh background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxRI2qRlnaEmcnbrowjqHefSRna23C1qDwXZnsaa5d3CGOQ54BH5mkZxYB3fsBMf9mblxmsEUkbwBc8EeN6wfg382VkhtcbDyffSoOEk1RvcI00Cc6U-H3JSSZAS-Z1Ddwox41Bk53O-QZGGH1gHvY5j1hwd8O42a1C5oqeo8hXInXKQ4bDUJFJuia2nfVJyPZXv6VtHPTjGA_Scnu7T3YoTlZlqPXdDeNMsJGIc81vBkdgrcplO1beTW5iNN4itIPLyizGbFkZ4k"/&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="flex-1"&gt;</p>
+<p class="p1">&lt;div class="flex justify-between items-start"&gt;</p>
+<p class="p1">&lt;h4 class="font-extrabold text-xl text-on-surface"&gt;Jean Dupont&lt;/h4&gt;</p>
+<p class="p1">&lt;span class="px-3 py-1 bg-[#dcc9ff] text-[#5b00c7] rounded-full text-[9px] font-black uppercase"&gt;Hospisoc&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;p class="text-on-surface-variant text-sm font-medium mb-3"&gt;Infirmier Spécialisé&lt;/p&gt;</p>
+<p class="p1">&lt;div class="flex items-center gap-4 text-xs text-on-surface-variant/70"&gt;</p>
+<p class="p1">&lt;span class="flex items-center gap-1"&gt;&lt;span class="material-symbols-outlined text-sm" data-icon="hub"&gt;hub&lt;/span&gt; 85 connexions&lt;/span&gt;</p>
+<p class="p1">&lt;span class="flex items-center gap-1"&gt;&lt;span class="material-symbols-outlined text-sm" data-icon="location_on"&gt;location_on&lt;/span&gt; Liège Centre&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;!-- Member 3 --&gt;</p>
+<p class="p1">&lt;div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_24px_48px_rgba(36,47,65,0.06)] flex items-center gap-6 group hover:bg-surface-container-low transition-all"&gt;</p>
+<p class="p1">&lt;div class="w-24 h-24 rounded-full overflow-hidden flex-shrink-0 border-4 border-surface-container-high transition-transform group-hover:scale-105"&gt;</p>
+<p class="p1">&lt;img alt="Lucie Lambert" class="w-full h-full object-cover" data-alt="young female healthcare worker in blue scrubs holding a digital tablet in a sunlit clinic hallway, modern medical professional" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhd4Av6RFZAEp8A1KCUIyoJ2Tp2wzGlKQMpQUBxdKdBX5JXalfZZ5Yovji9KL7rnVapPb82hVyXpUwFJknhEPXe36bCNGIUI6fLBeOFs_6cmyw6gIO41_d635-CFDTCbLFS9v9tsaLVGeSgeRSqY302IEfnbRe-nR2qzlEJ9gzu_JnzgR2IhCj1vXK4grEBxyp1Ky2YkM4JOxEKH9HjTorOxLKMzI-pxKb8WI_P01gTK_KhbUAtLuVcBf5GI3wfs9Wb48W4tUa1Js"/&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="flex-1"&gt;</p>
+<p class="p1">&lt;div class="flex justify-between items-start"&gt;</p>
+<p class="p1">&lt;h4 class="font-extrabold text-xl text-on-surface"&gt;Lucie Lambert&lt;/h4&gt;</p>
+<p class="p1">&lt;span class="px-3 py-1 bg-[#cdddfe] text-[#4647d3] rounded-full text-[9px] font-black uppercase"&gt;PalliaLiège&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;p class="text-on-surface-variant text-sm font-medium mb-3"&gt;Assistante Sociale&lt;/p&gt;</p>
+<p class="p1">&lt;div class="flex items-center gap-4 text-xs text-on-surface-variant/70"&gt;</p>
+<p class="p1">&lt;span class="flex items-center gap-1"&gt;&lt;span class="material-symbols-outlined text-sm" data-icon="hub"&gt;hub&lt;/span&gt; 42 connexions&lt;/span&gt;</p>
+<p class="p1">&lt;span class="flex items-center gap-1"&gt;&lt;span class="material-symbols-outlined text-sm" data-icon="schedule"&gt;schedule&lt;/span&gt; Disponible&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;!-- Row 3: More Members with Asymmetric Layout --&gt;</p>
+<p class="p1">&lt;div class="col-span-12 md:col-span-4 bg-surface-container-lowest rounded-xl p-6 shadow-[0px_24px_48px_rgba(36,47,65,0.06)] transition-transform hover:-translate-y-1"&gt;</p>
+<p class="p1">&lt;div class="mb-4"&gt;</p>
+<p class="p1">&lt;img alt="Marc Leroy" class="w-full h-40 object-cover rounded-lg mb-4" data-alt="close-up of a smiling male doctor wearing a white lab coat with a digital badge, blurred medical laboratory background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuACJ4c0hgzkpyXIJG_-0xTI3QZQJ4CID4idk-N5KTxmap-xaE90cspgW-Hraqlr5evsUJQ8cmw0CcsQVxfFUCJVAlwJVenUBOglpM1PpFks93A_DvU6zGB6GDvfTMN-fA386h58fvwEB1fVFOVQdTN8zNRkOzlcCG8hng2J_069EdJyRK-JFmRQltUTWyQZLsfAYcz562Xp0XJoBhFSYqnv2sPmfqXTlMH-K3hSmsSXzYkmzqc03oJmcbUQbO4uC_tbNY3MRjYaFzo"/&gt;</p>
+<p class="p1">&lt;h4 class="font-extrabold text-xl text-on-surface"&gt;Marc Leroy&lt;/h4&gt;</p>
+<p class="p1">&lt;p class="text-primary text-xs font-bold uppercase tracking-wider mb-2"&gt;Médecin Chef de Service&lt;/p&gt;</p>
+<p class="p1">&lt;p class="text-on-surface-variant text-xs leading-relaxed mb-4"&gt;Garant de l'éthique médicale au sein des structures partenaires.&lt;/p&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="flex justify-between items-center pt-4 border-t border-outline-variant/10"&gt;</p>
+<p class="p1">&lt;span class="text-xs font-black text-on-surface-variant/60"&gt;68 CONNEXIONS&lt;/span&gt;</p>
+<p class="p1">&lt;button class="p-2 bg-surface-container-low text-primary rounded-full"&gt;</p>
+<p class="p1">&lt;span class="material-symbols-outlined text-sm" data-icon="link"&gt;link&lt;/span&gt;</p>
+<p class="p1">&lt;/button&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="col-span-12 md:col-span-4 bg-surface-container-lowest rounded-xl p-6 shadow-[0px_24px_48px_rgba(36,47,65,0.06)] transition-transform hover:-translate-y-1"&gt;</p>
+<p class="p1">&lt;div class="mb-4"&gt;</p>
+<p class="p1">&lt;img alt="Emma Simon" class="w-full h-40 object-cover rounded-lg mb-4" data-alt="portrait of a focused professional healthcare administrator at her desk, multiple computer screens in background, warm interior lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhGUCMHJpWEo3SX2fp_0JH5AtsoPzpvLk1vKiw6y-PjWwVf0Voehjz-WljHzI9kLGXULjM4pYXZT1AI0kxiE-CtytH1tlhWok9Yuvy9x17fu7JUV-ksoFQReYdvf_-MiPSS_7_IrLwBmPd-Si0oOQ2YVIWFiaCrLpBLIFxLjPiBvbN7U4CoUDl9ZJ9z9xbKQKl9HyixpAymXYtWWWsP6stFg9GDpGa21Z7uIglHhcrknqaLIULFuhpCPG19sg-Zyy51zB1R6je-vY"/&gt;</p>
+<p class="p1">&lt;h4 class="font-extrabold text-xl text-on-surface"&gt;Emma Simon&lt;/h4&gt;</p>
+<p class="p1">&lt;p class="text-primary text-xs font-bold uppercase tracking-wider mb-2"&gt;Responsable Logistique&lt;/p&gt;</p>
+<p class="p1">&lt;p class="text-on-surface-variant text-xs leading-relaxed mb-4"&gt;Optimise les transferts de matériel entre sites du consortium.&lt;/p&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="flex justify-between items-center pt-4 border-t border-outline-variant/10"&gt;</p>
+<p class="p1">&lt;span class="text-xs font-black text-on-surface-variant/60"&gt;31 CONNEXIONS&lt;/span&gt;</p>
+<p class="p1">&lt;button class="p-2 bg-surface-container-low text-primary rounded-full"&gt;</p>
+<p class="p1">&lt;span class="material-symbols-outlined text-sm" data-icon="link"&gt;link&lt;/span&gt;</p>
+<p class="p1">&lt;/button&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="col-span-12 md:col-span-4 bg-primary text-white rounded-xl p-8 flex flex-col justify-center items-center text-center shadow-xl shadow-primary/30"&gt;</p>
+<p class="p1">&lt;span class="material-symbols-outlined text-5xl mb-4" data-icon="groups_2"&gt;groups_2&lt;/span&gt;</p>
+<p class="p1">&lt;h4 class="font-extrabold text-2xl mb-2"&gt;Rejoindre le réseau ?&lt;/h4&gt;</p>
+<p class="p1">&lt;p class="text-on-primary text-sm mb-6 opacity-90"&gt;Soumettez votre profil pour être indexé dans le consortium 08.&lt;/p&gt;</p>
+<p class="p1">&lt;button class="bg-surface-container-lowest text-primary px-8 py-3 rounded-full font-bold hover:bg-on-primary transition-colors"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>Demande d'adhésion</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;!-- Connection Visualization Footer --&gt;</p>
+<p class="p1">&lt;section class="mt-20 p-8 bg-surface-container-low rounded-xl"&gt;</p>
+<p class="p1">&lt;h5 class="font-black text-xs uppercase tracking-[0.2em] text-on-surface-variant mb-6"&gt;Légende des Collaborations&lt;/h5&gt;</p>
+<p class="p1">&lt;div class="flex flex-wrap gap-8"&gt;</p>
+<p class="p1">&lt;div class="flex items-center gap-3"&gt;</p>
+<p class="p1">&lt;div class="w-8 h-1 bg-primary rounded-full"&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;span class="text-xs font-bold text-on-surface"&gt;Directe (Quotidienne)&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="flex items-center gap-3"&gt;</p>
+<p class="p1">&lt;div class="w-8 h-[2px] border-b-2 border-dashed border-primary/40"&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;span class="text-xs font-bold text-on-surface-variant"&gt;Indirecte (Consultative)&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;div class="flex items-center gap-3"&gt;</p>
+<p class="p1">&lt;div class="w-8 h-2 bg-secondary rounded-full opacity-60"&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;span class="text-xs font-bold text-on-surface"&gt;Administrative&lt;/span&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;/section&gt;</p>
+<p class="p1">&lt;/main&gt;</p>
+<p class="p1">&lt;!-- Contextual FAB (Hidden on scroll or specific context as per rules) --&gt;</p>
+<p class="p1">&lt;button class="fixed bottom-8 right-8 w-16 h-16 bg-soft-tech-gradient text-white rounded-full shadow-2xl flex items-center justify-center group hover:scale-110 transition-transform z-50"&gt;</p>
+<p class="p1">&lt;span class="material-symbols-outlined text-3xl" data-icon="share"&gt;share&lt;/span&gt;</p>
+<p class="p1">&lt;span class="absolute right-20 bg-on-surface text-white text-xs font-bold py-2 px-4 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none"&gt;Exporter l'Annuaire&lt;/span&gt;</p>
+<p class="p1">&lt;/button&gt;</p>
+<p class="p1">&lt;/body&gt;&lt;/html&gt;</p>
+</body>
+</html>

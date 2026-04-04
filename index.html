@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consortium 08</title>
+  <style>
+    :root {
+      --bg: #12111A;
+      --surface: #1C1B27;
+      --border: #2A2938;
+      --text: #E8E7F4;
+      --text-muted: #6B6A82;
+      --accent: #7B6FE8;
+      --accent-hover: #9B91F0;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(18, 17, 26, 0.96);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      padding: 0 28px;
+      height: 60px;
+    }
+
+    .logo {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.4px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+    .tabs { display: flex; align-items: stretch; gap: 2px; flex: 1; height: 100%; }
+
+    .tab {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 0 18px;
+      cursor: pointer;
+      transition: color 0.18s, border-color 0.18s;
+      display: flex;
+      align-items: center;
+      margin-bottom: -1px;
+    }
+    .tab:hover { color: var(--text); }
+    .tab.active { color: #fff; border-bottom-color: var(--accent); }
+
+    /* ── FILTER BAR ── */
+    .filterbar {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: sticky;
+      top: 60px;
+      z-index: 99;
+      flex-wrap: wrap;
+    }
+
+    .filter-select, .filter-search {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.18s;
+      font-family: inherit;
+    }
+    .filter-select:focus, .filter-search:focus { border-color: var(--accent); }
+    .filter-select { cursor: pointer; }
+    .filter-select option { background: #1C1B27; }
+    .filter-search { min-width: 200px; }
+    .filter-search::placeholder { color: var(--text-muted); }
+
+    .filterbar-spacer { flex: 1; }
+
+    .view-toggle { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .toggle-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: color 0.18s, background 0.18s;
+      font-family: inherit;
+    }
+    .toggle-btn.active { background: var(--accent); color: #fff; }
+
+    /* ── MAIN ── */
+    .main { padding: 24px 28px; max-width: 1440px; margin: 0 auto; }
+
+    .view { display: none; }
+    .view.active { display: block; }
+
+    .results-count { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; }
+
+    /* ── MEMBER CARDS ── */
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .members-grid.compact {
+      grid-template-columns: repeat(6, 1fr);
+      gap: 14px;
+    }
+
+    .member-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .member-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(123, 111, 232, 0.12);
+    }
+
+    .member-card-photo-wrap {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+    }
+    .member-card-photo { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .member-card-initials {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(20px, 4vw, 32px);
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+    .member-card-org-logo {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.18);
+      flex-shrink: 0;
+    }
+
+    .member-card-body { padding: 16px; }
+    .member-card-name { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 9px; line-height: 1.2; }
+    .member-card-badges { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 9px; }
+    .member-card-role { font-size: 13px; color: var(--text-muted); margin-bottom: 6px; line-height: 1.4; }
+    .member-card-email { font-size: 12px; color: var(--text-muted); margin-bottom: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .member-card-connections {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .connection-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+    /* compact overrides */
+    .members-grid.compact .member-card-body { padding: 9px; }
+    .members-grid.compact .member-card-name { font-size: 12px; margin-bottom: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .members-grid.compact .member-card-role,
+    .members-grid.compact .member-card-email,
+    .members-grid.compact .member-card-connections,
+    .members-grid.compact .member-card-badges { display: none; }
+    .members-grid.compact .member-card-org-logo { width: 24px; height: 24px; border-radius: 6px; font-size: 7px; bottom: 6px; right: 6px; }
+    .members-grid.compact .member-card-initials { font-size: 18px; }
+
+    /* ── BADGE ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      line-height: 1.4;
+    }
+
+    /* ── ORGS LIST ── */
+    .orgs-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .org-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      cursor: pointer;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+    .org-row:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(123,111,232,0.08); }
+
+    .org-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .org-row-info { flex: 1; min-width: 0; }
+    .org-row-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .org-row-type { font-size: 12px; color: var(--text-muted); }
+    .org-row-badges { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .org-row-arrow { color: var(--text-muted); font-size: 20px; flex-shrink: 0; margin-left: 4px; }
+
+    /* ── LOGIGRAMME ── */
+    .logigramme-view { display: flex; flex-direction: column; gap: 14px; }
+
+    .logigramme-canvas {
+      background: #0E0D18;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: auto;
+      width: 100%;
+      height: 640px;
+    }
+    .logigramme-inner {
+      position: relative;
+      width: 1100px;
+      height: 640px;
+    }
+    .logigramme-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1100px;
+      height: 640px;
+      pointer-events: none;
+    }
+
+    .log-card {
+      position: absolute;
+      width: 110px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .log-card:hover { border-color: var(--accent); transform: scale(1.06); box-shadow: 0 6px 20px rgba(0,0,0,0.4); z-index: 10; }
+
+    .log-card-photo-wrap { position: relative; width: 110px; height: 110px; }
+    .log-card-initials { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: #fff; }
+    .log-card-org-logo {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 7px;
+      font-weight: 700;
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.15);
+    }
+    .log-card-name { font-size: 10px; font-weight: 600; color: var(--text); padding: 5px 6px; text-align: center; line-height: 1.3; }
+
+    .logigramme-legend {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .legend-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; }
+    .legend-items { display: flex; gap: 20px; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); }
+
+    /* ── DRAWER ── */
+    .backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s;
+    }
+    .backdrop.visible { opacity: 1; pointer-events: all; }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 380px;
+      height: 100%;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      z-index: 201;
+      transform: translateX(100%);
+      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .drawer.open { transform: translateX(0); }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .drawer-label { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; }
+
+    .drawer-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 22px;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 7px;
+      transition: color 0.18s, background 0.18s;
+      line-height: 1;
+    }
+    .drawer-close:hover { color: var(--text); background: var(--border); }
+
+    .drawer-body { flex: 1; overflow-y: auto; padding: 22px; }
+
+    .drawer-hero { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+    .drawer-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 16px;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .drawer-name { font-size: 20px; font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 4px; }
+    .drawer-sub { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+
+    .drawer-section { margin-bottom: 22px; }
+    .drawer-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin-bottom: 10px;
+    }
+    .drawer-field {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13.5px;
+    }
+    .drawer-field:last-child { border-bottom: none; }
+    .drawer-field-label { color: var(--text-muted); min-width: 82px; flex-shrink: 0; padding-top: 1px; }
+    .drawer-field-value { color: var(--text); word-break: break-word; }
+
+    .connection-list { display: flex; flex-direction: column; gap: 7px; }
+    .connection-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 11px;
+      background: var(--bg);
+      border-radius: 9px;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-size: 13px;
+    }
+    .connection-item:hover { background: #1A1928; }
+    .mini-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .connection-info { flex: 1; min-width: 0; }
+    .connection-name { font-weight: 600; color: var(--text); }
+    .connection-type { font-size: 11px; margin-top: 2px; }
+    .connection-pip { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    .members-mini { display: flex; flex-direction: column; gap: 7px; }
+    .member-mini {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 11px;
+      background: var(--bg);
+      border-radius: 9px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .member-mini:hover { background: #1A1928; }
+    .member-mini-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .member-mini-role { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+    .drawer-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 18px; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state { text-align: center; padding: 56px 20px; color: var(--text-muted); }
+    .empty-state-icon { font-size: 36px; margin-bottom: 12px; opacity: 0.4; }
+    .empty-state-text { font-size: 15px; }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="logo">
+    <div class="logo-dot"></div>
+    Consortium 08
+  </div>
+  <nav class="tabs">
+    <button class="tab active" data-view="membres">Membres</button>
+    <button class="tab" data-view="organisations">Organisations</button>
+    <button class="tab" data-view="logigramme">Logigramme</button>
+  </nav>
+</header>
+
+<!-- FILTER BAR -->
+<div class="filterbar" id="filterbar">
+  <select class="filter-select" id="filterOrg"><option value="">Toutes les organisations</option></select>
+  <select class="filter-select" id="filterPilier"><option value="">Tous les piliers</option></select>
+  <input class="filter-search" id="filterSearch" type="text" placeholder="Rechercher…">
+  <div class="filterbar-spacer"></div>
+  <div class="view-toggle" id="viewToggle">
+    <button class="toggle-btn active" data-mode="detailed">Détaillé</button>
+    <button class="toggle-btn" data-mode="compact">Compact</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- MEMBRES -->
+  <div class="view active" id="view-membres">
+    <div class="results-count" id="membresCount"></div>
+    <div class="members-grid" id="membresGrid"></div>
+  </div>
+
+  <!-- ORGANISATIONS -->
+  <div class="view" id="view-organisations">
+    <div class="results-count" id="orgsCount"></div>
+    <div class="orgs-list" id="orgsList"></div>
+  </div>
+
+  <!-- LOGIGRAMME -->
+  <div class="view logigramme-view" id="view-logigramme">
+    <div class="logigramme-canvas">
+      <div class="logigramme-inner" id="logigrammeInner">
+        <svg class="logigramme-svg" id="logigrammeSvg" viewBox="0 0 1100 640" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+    </div>
+    <div class="logigramme-legend">
+      <span class="legend-title">Légende</span>
+      <div class="legend-items">
+        <div class="legend-item">
+          <svg width="32" height="10"><line x1="0" y1="5" x2="32" y2="5" stroke="#1D9E75" stroke-width="2.5"/></svg>
+          Collaborent activement
+        </div>
+        <div class="legend-item">
+          <svg width="32" height="10"><line x1="0" y1="5" x2="32" y2="5" stroke="#7B6FE8" stroke-width="2.5" stroke-dasharray="5 3"/></svg>
+          Se connaissent personnellement
+        </div>
+        <div class="legend-item">
+          <svg width="32" height="10"><line x1="0" y1="5" x2="32" y2="5" stroke="#EF9F27" stroke-width="2.5"/></svg>
+          Ont déjà collaboré
+        </div>
+        <div class="legend-item">
+          <svg width="32" height="10"><line x1="0" y1="5" x2="32" y2="5" stroke="#4E4D68" stroke-width="2.5" stroke-dasharray="5 3"/></svg>
+          Organisations en contact
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- BACKDROP + DRAWER -->
+<div class="backdrop" id="backdrop"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <span class="drawer-label" id="drawerLabel">Détails</span>
+    <button class="drawer-close" id="drawerClose" title="Fermer">×</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════
+
+const ORGS = [
+  {
+    id: 'pallialg',
+    name: 'PalliaLiège',
+    abbr: 'PL',
+    type: 'Soins palliatifs',
+    pilier: 'Soins',
+    zone: 'Province de Liège',
+    etp: 12,
+    financement: 'INAMI + Fédération Wallonie-Bruxelles',
+    color: '#1D9E75',
+    bg: '#0A2E20',
+    desc: 'Plateforme de soins palliatifs de la province de Liège, coordonnant les soins de fin de vie à domicile et en institution.'
+  },
+  {
+    id: 'hospisoc',
+    name: 'Hospisoc',
+    abbr: 'HS',
+    type: 'Accompagnement social',
+    pilier: 'Social',
+    zone: 'Liège',
+    etp: 8,
+    financement: 'SPW Santé + CPAS',
+    color: '#534AB7',
+    bg: '#1A1640',
+    desc: 'Association d\'accompagnement social en soins palliatifs, soutien aux familles et proches aidants.'
+  },
+  {
+    id: 'cpasliege',
+    name: 'CPAS Liège',
+    abbr: 'CL',
+    type: 'Centre public d\'action sociale',
+    pilier: 'Social',
+    zone: 'Liège',
+    etp: 45,
+    financement: 'Commune de Liège',
+    color: '#2B7FC7',
+    bg: '#0D2540',
+    desc: 'Centre d\'action sociale de la Ville de Liège : aide sociale, insertion professionnelle, accompagnement des personnes vulnérables.'
+  },
+  {
+    id: 'chrcitadelle',
+    name: 'CHR Citadelle',
+    abbr: 'CH',
+    type: 'Centre hospitalier régional',
+    pilier: 'Médical',
+    zone: 'Liège',
+    etp: 280,
+    financement: 'INAMI + Commune',
+    color: '#C74B2B',
+    bg: '#3A1208',
+    desc: 'Hôpital régional de Liège avec unité de soins palliatifs, service d\'oncologie et médecine interne.'
+  },
+  {
+    id: 'liensoin',
+    name: 'Lien & Soin',
+    abbr: 'LS',
+    type: 'Association de soignants',
+    pilier: 'Coordination',
+    zone: 'Wallonie',
+    etp: 6,
+    financement: 'Fonds social européen',
+    color: '#D4782A',
+    bg: '#3D1F0A',
+    desc: 'Réseau de soignants de proximité actifs en soins palliatifs, favorisant la coordination interprofessionnelle.'
+  },
+  {
+    id: 'reseausante',
+    name: 'Réseau Santé Liège',
+    abbr: 'RS',
+    type: 'Coordination santé',
+    pilier: 'Coordination',
+    zone: 'Liège',
+    etp: 15,
+    financement: 'AViQ + INAMI',
+    color: '#9B3BC7',
+    bg: '#220D30',
+    desc: 'Réseau local de soins intégrés coordonnant les acteurs de santé du bassin liégeois.'
+  }
+];
+
+const MEMBRES = [
+  {
+    id: 1,
+    prenom: 'Sophie',
+    nom: 'Marchand',
+    org: 'pallialg',
+    pilier: 'Soins',
+    role: 'Coordinatrice de soins palliatifs',
+    email: 'sophie.marchand@pallialg.be',
+    tel: '+32 4 123 45 67',
+    photo: null,
+    logPos: { x: 80, y: 75 }
+  },
+  {
+    id: 2,
+    prenom: 'Thomas',
+    nom: 'Renard',
+    org: 'chrcitadelle',
+    pilier: 'Médical',
+    role: 'Médecin interniste',
+    email: 'thomas.renard@chrcitadelle.be',
+    tel: '+32 4 234 56 78',
+    photo: null,
+    logPos: { x: 370, y: 45 }
+  },
+  {
+    id: 3,
+    prenom: 'Marie',
+    nom: 'Dubois',
+    org: 'cpasliege',
+    pilier: 'Social',
+    role: 'Assistante sociale',
+    email: 'm.dubois@cpasliege.be',
+    tel: '+32 4 345 67 89',
+    photo: null,
+    logPos: { x: 680, y: 85 }
+  },
+  {
+    id: 4,
+    prenom: 'Pierre',
+    nom: 'Lambert',
+    org: 'pallialg',
+    pilier: 'Soins',
+    role: 'Infirmier coordinateur',
+    email: 'p.lambert@pallialg.be',
+    tel: '+32 4 456 78 90',
+    photo: null,
+    logPos: { x: 55, y: 320 }
+  },
+  {
+    id: 5,
+    prenom: 'Claire',
+    nom: 'Martin',
+    org: 'hospisoc',
+    pilier: 'Social',
+    role: 'Psychologue',
+    email: 'claire.martin@hospisoc.be',
+    tel: '+32 4 567 89 01',
+    photo: null,
+    logPos: { x: 300, y: 290 }
+  },
+  {
+    id: 6,
+    prenom: 'Jean',
+    nom: 'Lecomte',
+    org: 'hospisoc',
+    pilier: 'Social',
+    role: 'Directeur',
+    email: 'j.lecomte@hospisoc.be',
+    tel: '+32 4 678 90 12',
+    photo: null,
+    logPos: { x: 570, y: 265 }
+  },
+  {
+    id: 7,
+    prenom: 'Anne',
+    nom: 'Pirard',
+    org: 'liensoin',
+    pilier: 'Coordination',
+    role: 'Coordinatrice réseau',
+    email: 'a.pirard@liensoin.be',
+    tel: '+32 4 789 01 23',
+    photo: null,
+    logPos: { x: 865, y: 185 }
+  },
+  {
+    id: 8,
+    prenom: 'Marc',
+    nom: 'Fontaine',
+    org: 'reseausante',
+    pilier: 'Coordination',
+    role: 'Médecin généraliste référent',
+    email: 'm.fontaine@reseausante.be',
+    tel: '+32 4 890 12 34',
+    photo: null,
+    logPos: { x: 190, y: 485 }
+  },
+  {
+    id: 9,
+    prenom: 'Julie',
+    nom: 'Bastin',
+    org: 'chrcitadelle',
+    pilier: 'Médical',
+    role: 'Infirmière en soins palliatifs',
+    email: 'j.bastin@chrcitadelle.be',
+    tel: '+32 4 901 23 45',
+    photo: null,
+    logPos: { x: 470, y: 455 }
+  },
+  {
+    id: 10,
+    prenom: 'François',
+    nom: 'Dewez',
+    org: 'cpasliege',
+    pilier: 'Social',
+    role: 'Responsable accompagnement',
+    email: 'f.dewez@cpasliege.be',
+    tel: '+32 4 012 34 56',
+    photo: null,
+    logPos: { x: 745, y: 430 }
+  }
+];
+
+const LIENS = [
+  { from: 1, to: 2, type: 'collabore' },
+  { from: 1, to: 4, type: 'collabore' },
+  { from: 1, to: 5, type: 'connait' },
+  { from: 1, to: 7, type: 'ancienne' },
+  { from: 2, to: 9, type: 'collabore' },
+  { from: 2, to: 8, type: 'connait' },
+  { from: 5, to: 6, type: 'collabore' },
+  { from: 5, to: 9, type: 'ancienne' },
+  { from: 3, to: 10, type: 'collabore' },
+  { from: 3, to: 7, type: 'connait' },
+  { from: 6, to: 8, type: 'connait' }
+];
+
+const LINK_STYLES = {
+  collabore:    { label: 'Collaborent activement',         color: '#1D9E75', dash: false },
+  connait:      { label: 'Se connaissent personnellement', color: '#7B6FE8', dash: true  },
+  ancienne:     { label: 'Ont déjà collaboré',             color: '#EF9F27', dash: false },
+  orgscontact:  { label: 'Organisations en contact',       color: '#4E4D68', dash: true  }
+};
+
+const PILIER_STYLES = {
+  'Soins':        { bg: '#0A2E20', color: '#1D9E75' },
+  'Social':       { bg: '#1A1640', color: '#8F85E0' },
+  'Médical':      { bg: '#0D2540', color: '#4BA3E3' },
+  'Coordination': { bg: '#3D1F0A', color: '#D4782A' },
+  'Prévention':   { bg: '#2D0E1F', color: '#C45A9A' }
+};
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+
+let currentView = 'membres';
+let currentMode = 'detailed';
+let filterOrg = '';
+let filterPilier = '';
+let filterSearch = '';
+
+// ══════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════
+
+const getOrg = id => ORGS.find(o => o.id === id);
+const getMembre = id => MEMBRES.find(m => m.id === id);
+const initials = (p, n) => (p[0] + n[0]).toUpperCase();
+
+function pilierBadge(pilier) {
+  const s = PILIER_STYLES[pilier] || { bg: '#1C1B27', color: '#6B6A82' };
+  return `<span class="badge" style="background:${s.bg};color:${s.color}">${pilier}</span>`;
+}
+
+function orgBadge(org) {
+  if (!org) return '';
+  return `<span class="badge" style="background:${org.bg};color:${org.color}">${org.name}</span>`;
+}
+
+function getConnectedMembers(id) {
+  return LIENS
+    .filter(l => l.from === id || l.to === id)
+    .map(l => ({ membre: getMembre(l.from === id ? l.to : l.from), type: l.type }))
+    .filter(c => c.membre);
+}
+
+function memberAvatar(m, size = 72, radius = 16, fontSize = 24) {
+  const org = getOrg(m.org);
+  const bg = org ? org.color + '28' : '#2A2938';
+  const color = org ? org.color : '#E8E7F4';
+  if (m.photo) {
+    return `<div style="width:${size}px;height:${size}px;border-radius:${radius}px;overflow:hidden;flex-shrink:0">
+      <img src="${m.photo}" style="width:100%;height:100%;object-fit:cover" alt="">
+    </div>`;
+  }
+  return `<div style="width:${size}px;height:${size}px;border-radius:${radius}px;background:${bg};color:${color};display:flex;align-items:center;justify-content:center;font-size:${fontSize}px;font-weight:700;flex-shrink:0">${initials(m.prenom, m.nom)}</div>`;
+}
+
+// ══════════════════════════════════════════════
+// FILTERS
+// ══════════════════════════════════════════════
+
+function filteredMembres() {
+  const q = filterSearch.toLowerCase();
+  return MEMBRES.filter(m => {
+    if (filterOrg && m.org !== filterOrg) return false;
+    if (filterPilier && m.pilier !== filterPilier) return false;
+    if (q) {
+      const org = getOrg(m.org);
+      const hay = [m.prenom, m.nom, m.role, m.email, org?.name].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function filteredOrgs() {
+  const q = filterSearch.toLowerCase();
+  return ORGS.filter(o => {
+    if (filterOrg && o.id !== filterOrg) return false;
+    if (filterPilier && o.pilier !== filterPilier) return false;
+    if (q) {
+      const hay = [o.name, o.type, o.pilier, o.zone].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+// ══════════════════════════════════════════════
+// RENDER MEMBRES
+// ══════════════════════════════════════════════
+
+function renderMembres() {
+  const grid = document.getElementById('membresGrid');
+  const countEl = document.getElementById('membresCount');
+  const list = filteredMembres();
+
+  grid.className = 'members-grid' + (currentMode === 'compact' ? ' compact' : '');
+  countEl.textContent = `${list.length} membre${list.length !== 1 ? 's' : ''}`;
+
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">🔍</div><div class="empty-state-text">Aucun membre ne correspond aux filtres.</div></div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(m => {
+    const org = getOrg(m.org);
+    const ini = initials(m.prenom, m.nom);
+    const photoBg = org ? org.color + '28' : '#2A2938';
+    const photoColor = org ? org.color : '#E8E7F4';
+    const connCount = getConnectedMembers(m.id).length;
+
+    return `
+      <div class="member-card" onclick="openMemberDrawer(${m.id})">
+        <div class="member-card-photo-wrap">
+          ${m.photo
+            ? `<img class="member-card-photo" src="${m.photo}" alt="${m.prenom} ${m.nom}">`
+            : `<div class="member-card-initials" style="background:${photoBg};color:${photoColor}">${ini}</div>`
+          }
+          ${org ? `<div class="member-card-org-logo" style="background:${org.color}">${org.abbr}</div>` : ''}
+        </div>
+        <div class="member-card-body">
+          <div class="member-card-name">${m.prenom} ${m.nom}</div>
+          <div class="member-card-badges">
+            ${orgBadge(org)}
+            ${pilierBadge(m.pilier)}
+          </div>
+          <div class="member-card-role">${m.role}</div>
+          <div class="member-card-email">${m.email}</div>
+          <div class="member-card-connections">
+            <div class="connection-dot"></div>
+            ${connCount} connexion${connCount !== 1 ? 's' : ''}
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// RENDER ORGANISATIONS
+// ══════════════════════════════════════════════
+
+function renderOrgs() {
+  const list = document.getElementById('orgsList');
+  const countEl = document.getElementById('orgsCount');
+  const orgs = filteredOrgs();
+
+  countEl.textContent = `${orgs.length} organisation${orgs.length !== 1 ? 's' : ''}`;
+
+  if (!orgs.length) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-text">Aucune organisation ne correspond aux filtres.</div></div>`;
+    return;
+  }
+
+  list.innerHTML = orgs.map(org => {
+    const count = MEMBRES.filter(m => m.org === org.id).length;
+    const ps = PILIER_STYLES[org.pilier] || { bg: '#1C1B27', color: '#6B6A82' };
+    const badgeBase = 'background:#1C1B27;color:#6B6A82';
+    return `
+      <div class="org-row" onclick="openOrgDrawer('${org.id}')">
+        <div class="org-logo" style="background:${org.color}">${org.abbr}</div>
+        <div class="org-row-info">
+          <div class="org-row-name">${org.name}</div>
+          <div class="org-row-type">${org.type}</div>
+        </div>
+        <div class="org-row-badges">
+          <span class="badge" style="background:${ps.bg};color:${ps.color}">${org.pilier}</span>
+          <span class="badge" style="${badgeBase}">📍 ${org.zone}</span>
+          <span class="badge" style="${badgeBase}">⚡ ${org.etp} ETP</span>
+          <span class="badge" style="${badgeBase}">👥 ${count} membre${count !== 1 ? 's' : ''}</span>
+        </div>
+        <span class="org-row-arrow">›</span>
+      </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// RENDER LOGIGRAMME
+// ══════════════════════════════════════════════
+
+function renderLogigramme() {
+  const inner = document.getElementById('logigrammeInner');
+  const svg = document.getElementById('logigrammeSvg');
+  const HALF = 55; // half of 110px card
+
+  // Remove old log-cards
+  inner.querySelectorAll('.log-card').forEach(el => el.remove());
+
+  // Draw SVG lines first
+  svg.innerHTML = LIENS.map(lien => {
+    const from = getMembre(lien.from);
+    const to = getMembre(lien.to);
+    if (!from || !to) return '';
+    const ls = LINK_STYLES[lien.type] || LINK_STYLES.collabore;
+    const x1 = from.logPos.x + HALF, y1 = from.logPos.y + HALF;
+    const x2 = to.logPos.x + HALF,   y2 = to.logPos.y + HALF;
+    const dash = ls.dash ? `stroke-dasharray="7 4"` : '';
+    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${ls.color}" stroke-width="2" ${dash} opacity="0.65" stroke-linecap="round"/>`;
+  }).join('');
+
+  // Add member cards
+  MEMBRES.forEach(m => {
+    const org = getOrg(m.org);
+    const ini = initials(m.prenom, m.nom);
+    const photoBg = org ? org.color + '28' : '#2A2938';
+    const photoColor = org ? org.color : '#E8E7F4';
+
+    const card = document.createElement('div');
+    card.className = 'log-card';
+    card.style.left = m.logPos.x + 'px';
+    card.style.top  = m.logPos.y + 'px';
+    card.onclick = () => openMemberDrawer(m.id);
+    card.innerHTML = `
+      <div class="log-card-photo-wrap">
+        ${m.photo
+          ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover;display:block" alt="">`
+          : `<div class="log-card-initials" style="background:${photoBg};color:${photoColor}">${ini}</div>`
+        }
+        ${org ? `<div class="log-card-org-logo" style="background:${org.color}">${org.abbr}</div>` : ''}
+      </div>
+      <div class="log-card-name">${m.prenom}<br>${m.nom}</div>`;
+    inner.appendChild(card);
+  });
+}
+
+// ══════════════════════════════════════════════
+// DRAWER — MEMBRE
+// ══════════════════════════════════════════════
+
+function openMemberDrawer(id) {
+  const m = getMembre(id);
+  if (!m) return;
+  const org = getOrg(m.org);
+  const connections = getConnectedMembers(m.id);
+
+  document.getElementById('drawerLabel').textContent = 'Fiche membre';
+  document.getElementById('drawerBody').innerHTML = `
+    <div class="drawer-hero">
+      ${memberAvatar(m, 72, 16, 24)}
+      <div>
+        <div class="drawer-name">${m.prenom} ${m.nom}</div>
+        <div class="drawer-sub">${m.role}</div>
+        <div style="margin-top:8px;display:flex;gap:5px;flex-wrap:wrap">
+          ${orgBadge(org)}${pilierBadge(m.pilier)}
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Coordonnées</div>
+      <div class="drawer-field">
+        <span class="drawer-field-label">Email</span>
+        <span class="drawer-field-value">${m.email}</span>
+      </div>
+      <div class="drawer-field">
+        <span class="drawer-field-label">Téléphone</span>
+        <span class="drawer-field-value">${m.tel}</span>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Connexions (${connections.length})</div>
+      <div class="connection-list">
+        ${connections.length === 0
+          ? `<p style="font-size:13px;color:var(--text-muted)">Aucune connexion renseignée.</p>`
+          : connections.map(c => {
+              const co = getOrg(c.membre.org);
+              const ls = LINK_STYLES[c.type] || LINK_STYLES.collabore;
+              const avBg = co ? co.color + '28' : '#2A2938';
+              const avColor = co ? co.color : '#E8E7F4';
+              return `
+                <div class="connection-item" onclick="openMemberDrawer(${c.membre.id})">
+                  <div class="mini-avatar" style="background:${avBg};color:${avColor}">${initials(c.membre.prenom, c.membre.nom)}</div>
+                  <div class="connection-info">
+                    <div class="connection-name">${c.membre.prenom} ${c.membre.nom}</div>
+                    <div class="connection-type" style="color:${ls.color}">${ls.label}</div>
+                  </div>
+                  <div class="connection-pip" style="background:${ls.color}"></div>
+                </div>`;
+            }).join('')
+        }
+      </div>
+    </div>`;
+
+  openDrawer();
+}
+
+// ══════════════════════════════════════════════
+// DRAWER — ORGANISATION
+// ══════════════════════════════════════════════
+
+function openOrgDrawer(id) {
+  const org = getOrg(id);
+  if (!org) return;
+  const orgMembres = MEMBRES.filter(m => m.org === id);
+  const ps = PILIER_STYLES[org.pilier] || { bg: '#1C1B27', color: '#6B6A82' };
+
+  document.getElementById('drawerLabel').textContent = 'Fiche organisation';
+  document.getElementById('drawerBody').innerHTML = `
+    <div class="drawer-hero">
+      <div style="width:64px;height:64px;border-radius:14px;background:${org.color};display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;flex-shrink:0">${org.abbr}</div>
+      <div>
+        <div class="drawer-name">${org.name}</div>
+        <div class="drawer-sub">${org.type}</div>
+        <div style="margin-top:8px"><span class="badge" style="background:${ps.bg};color:${ps.color}">${org.pilier}</span></div>
+      </div>
+    </div>
+
+    <p class="drawer-desc">${org.desc}</p>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Informations</div>
+      <div class="drawer-field">
+        <span class="drawer-field-label">Zone</span>
+        <span class="drawer-field-value">${org.zone}</span>
+      </div>
+      <div class="drawer-field">
+        <span class="drawer-field-label">ETP</span>
+        <span class="drawer-field-value">${org.etp}</span>
+      </div>
+      <div class="drawer-field">
+        <span class="drawer-field-label">Financement</span>
+        <span class="drawer-field-value">${org.financement}</span>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Membres dans le Consortium (${orgMembres.length})</div>
+      <div class="members-mini">
+        ${orgMembres.length === 0
+          ? `<p style="font-size:13px;color:var(--text-muted)">Aucun membre renseigné.</p>`
+          : orgMembres.map(m => {
+              const avBg = org.color + '28';
+              return `
+                <div class="member-mini" onclick="openMemberDrawer(${m.id})">
+                  <div class="mini-avatar" style="background:${avBg};color:${org.color}">${initials(m.prenom, m.nom)}</div>
+                  <div>
+                    <div class="member-mini-name">${m.prenom} ${m.nom}</div>
+                    <div class="member-mini-role">${m.role}</div>
+                  </div>
+                </div>`;
+            }).join('')
+        }
+      </div>
+    </div>`;
+
+  openDrawer();
+}
+
+function openDrawer() {
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('backdrop').classList.add('visible');
+}
+
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('backdrop').classList.remove('visible');
+}
+
+// ══════════════════════════════════════════════
+// VIEW SWITCHING
+// ══════════════════════════════════════════════
+
+function switchView(view) {
+  currentView = view;
+
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.view === view));
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + view));
+  document.getElementById('viewToggle').style.display = view === 'membres' ? 'flex' : 'none';
+
+  if (view === 'membres')       renderMembres();
+  else if (view === 'organisations') renderOrgs();
+  else if (view === 'logigramme')    renderLogigramme();
+}
+
+// ══════════════════════════════════════════════
+// POPULATE FILTER SELECTS
+// ══════════════════════════════════════════════
+
+function populateFilters() {
+  const orgSel = document.getElementById('filterOrg');
+  ORGS.forEach(o => {
+    const opt = document.createElement('option');
+    opt.value = o.id;
+    opt.textContent = o.name;
+    orgSel.appendChild(opt);
+  });
+
+  const pilierSel = document.getElementById('filterPilier');
+  const piliers = [...new Set([...MEMBRES.map(m => m.pilier), ...ORGS.map(o => o.pilier)])].sort();
+  piliers.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p;
+    opt.textContent = p;
+    pilierSel.appendChild(opt);
+  });
+}
+
+function applyFilters() {
+  filterOrg    = document.getElementById('filterOrg').value;
+  filterPilier = document.getElementById('filterPilier').value;
+  filterSearch = document.getElementById('filterSearch').value.trim();
+  if (currentView === 'membres')       renderMembres();
+  else if (currentView === 'organisations') renderOrgs();
+}
+
+// ══════════════════════════════════════════════
+// EVENTS
+// ══════════════════════════════════════════════
+
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => switchView(t.dataset.view)));
+
+document.querySelectorAll('.toggle-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentMode = btn.dataset.mode;
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === currentMode));
+    renderMembres();
+  });
+});
+
+document.getElementById('filterOrg').addEventListener('change', applyFilters);
+document.getElementById('filterPilier').addEventListener('change', applyFilters);
+document.getElementById('filterSearch').addEventListener('input', applyFilters);
+
+document.getElementById('backdrop').addEventListener('click', closeDrawer);
+document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+
+populateFilters();
+renderMembres();
+</script>
+</body>
+</html>
