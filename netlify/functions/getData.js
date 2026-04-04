@@ -1,77 +1,34 @@
-// Notion API direct
-'use strict';
-
-// ── Hardcoded sample data (temporary — pending proper Notion OAuth connection) ──
-
-const ORGS = [
-  {
-    id:          'org-pallialiege',
-    name:        'PalliaLiège asbl',
-    type:        'Soins palliatifs',
-    pilier:      'Soins primaires',
-    zone:        'Zone 08',
-    etp:         7.6,
-    financement: '',
-    desc:        ''
-  },
-  {
-    id:          'org-hospisoc',
-    name:        'Hospisoc asbl',
-    type:        'Association professionnelle',
-    pilier:      'Action sociale',
-    zone:        'Wallonie',
-    etp:         0.5,
-    financement: '',
-    desc:        ''
-  }
-];
-
-const MEMBRES = [
-  {
-    id:     'membre-ludovic',
-    nom:    'Ludovic Perpete',
-    role:   'Coordinateur',
-    email:  'ludovic@hospisoc.be',
-    tel:    '',
-    photo:  null,
-    orgId:  'org-hospisoc',
-    statut: ''
-  },
-  {
-    id:     'membre-nathalie',
-    nom:    'Nathalie Legaye',
-    role:   '',
-    email:  '',
-    tel:    '',
-    photo:  null,
-    orgId:  'org-pallialiege',
-    statut: ''
-  }
-];
-
-const LIENS = [];
-
-// ── Handler ────────────────────────────────────────────────────────────────
 exports.handler = async (event) => {
   const headers = {
-    'Content-Type':                 'application/json',
-    'Access-Control-Allow-Origin':  '*',
-    'Access-Control-Allow-Headers': 'Content-Type'
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "application/json"
+  };
+  const type = event.queryStringParameters?.type;
+  const token = process.env.NOTION_TOKEN;
+  if (!token) return { statusCode: 500, headers, body: JSON.stringify({ error: "NOTION_TOKEN not set" }) };
+
+  const dbMap = {
+    membres: "6436e822-48be-475c-879e-d019f780c39c",
+    orgs: "26e8ec6c-0853-4ce4-96da-ad1d5ac25153",
+    liens: "9924620e-87e1-4d5b-89eb-206b582b253b"
   };
 
-  if (event.httpMethod === 'OPTIONS') {
-    return { statusCode: 200, headers, body: '' };
+  if (!dbMap[type]) return { statusCode: 400, headers, body: JSON.stringify({ error: "Invalid type" }) };
+
+  try {
+    const resp = await fetch(`https://api.notion.com/v1/databases/${dbMap[type]}/query`, {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + token,
+        "Notion-Version": "2022-06-28",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({})
+    });
+    const text = await resp.text();
+    if (!resp.ok) return { statusCode: 500, headers, body: JSON.stringify({ error: text }) };
+    return { statusCode: 200, headers, body: text };
+  } catch (err) {
+    return { statusCode: 500, headers, body: JSON.stringify({ error: err.message }) };
   }
-
-  const type = (event.queryStringParameters || {}).type;
-
-  if (type === 'orgs')    return { statusCode: 200, headers, body: JSON.stringify(ORGS) };
-  if (type === 'membres') return { statusCode: 200, headers, body: JSON.stringify(MEMBRES) };
-  if (type === 'liens')   return { statusCode: 200, headers, body: JSON.stringify(LIENS) };
-
-  return {
-    statusCode: 400,
-    headers,
-    body: JSON.stringify({ error: `Unknown type "${type}". Expected: orgs, membres, liens` })
-  };
 };
