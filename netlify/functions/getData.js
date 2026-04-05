@@ -81,8 +81,9 @@ function mapOrganisation(page) {
     nom: prop(p, "Nom", "title"),
     typeDeStructure: prop(p, "Type de structure", "select"),
     pilier: prop(p, "Pilier", "select"),
-    zonesCouvertes: prop(p, "Zones couvertes", "multi_select"),
-    nombreETP: prop(p, "Nombre ETP", "number"),
+    missions: prop(p, "Missions", "rich_text"),
+    roleGouvernance: prop(p, "Rôle dans la gouvernance", "select"),
+    typeParticipation: prop(p, "Type de participation", "select"),
     logo: prop(p, "Logo", "files"),
     emailDeContact: prop(p, "Email de contact", "email")
   };

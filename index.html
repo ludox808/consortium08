@@ -391,26 +391,113 @@
     .compact-name { font-size: 11px; font-weight: 700; color: var(--text); text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     /* ── ORGS LIST ── */
-    .orgs-list { display: flex; flex-direction: column; gap: 10px; }
-    .org-row {
-      background: var(--surface);
-      border-radius: 1.25rem;
-      box-shadow: var(--shadow-sm);
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      cursor: pointer;
-      transition: box-shadow 0.18s, transform 0.18s;
-      border: 1px solid transparent;
+    /* ── ORGS GRID + FLIP CARDS ── */
+    .orgs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
     }
-    .org-row:hover { transform: translateX(4px); box-shadow: var(--shadow-md); border-color: rgba(70,71,211,0.15); }
-    .org-logo { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: white; flex-shrink: 0; }
-    .org-row-info { flex: 1; min-width: 0; }
-    .org-row-name { font-size: 15px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .org-row-type { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-    .org-row-badges { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-    .org-row-arrow { color: var(--text-muted); font-size: 22px; margin-left: 4px; flex-shrink: 0; }
+    .org-card-wrapper {
+      height: 300px;
+      perspective: 1000px;
+    }
+    .org-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.5s ease;
+    }
+    .org-card-inner.flipped { transform: rotateY(180deg); }
+    .org-card-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      background: #1C1B27;
+      border: 1.5px solid #2A2938;
+      border-radius: 1.25rem;
+      transition: border-color 0.2s;
+    }
+    .org-card-front {
+      display: flex;
+      flex-direction: column;
+      padding: 18px;
+      gap: 10px;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .org-card-front:hover { border-color: #3D3B55; }
+    .org-card-header { display: flex; align-items: center; gap: 12px; }
+    .org-card-logo { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; flex-shrink: 0; }
+    .org-card-title-wrap { flex: 1; min-width: 0; }
+    .org-card-name { font-size: 14px; font-weight: 700; color: #E8E7F4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .org-card-type { font-size: 11px; color: rgba(232,231,244,0.45); margin-top: 2px; }
+    .org-card-badges { display: flex; flex-wrap: wrap; gap: 5px; }
+    .org-dark-badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 9999px; font-size: 10px; font-weight: 800; white-space: nowrap; letter-spacing: 0.03em; }
+    .org-secondary-badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 9999px; font-size: 10px; font-weight: 600; white-space: nowrap; background: rgba(232,231,244,0.07); color: rgba(232,231,244,0.5); }
+    .org-mission-preview {
+      flex: 1;
+      font-size: 12px;
+      color: rgba(232,231,244,0.5);
+      line-height: 1.55;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+    }
+    .org-flip-btn {
+      align-self: flex-end;
+      margin-top: auto;
+      background: rgba(232,231,244,0.06);
+      border: 1px solid rgba(232,231,244,0.1);
+      color: rgba(232,231,244,0.38);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 11px;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+    .org-flip-btn:hover { background: rgba(123,111,232,0.16); color: #9f97f5; border-color: rgba(123,111,232,0.35); }
+    .org-card-back {
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      gap: 10px;
+      overflow: hidden;
+    }
+    .org-back-btn {
+      align-self: flex-start;
+      background: rgba(232,231,244,0.06);
+      border: 1px solid rgba(232,231,244,0.1);
+      color: rgba(232,231,244,0.45);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 11px;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, color 0.15s;
+      flex-shrink: 0;
+    }
+    .org-back-btn:hover { background: rgba(123,111,232,0.16); color: #9f97f5; }
+    .org-back-name { font-size: 13px; font-weight: 700; color: #E8E7F4; flex-shrink: 0; }
+    .org-back-mission {
+      flex: 1;
+      font-size: 12px;
+      color: rgba(232,231,244,0.58);
+      line-height: 1.6;
+      overflow-y: auto;
+    }
+    .org-back-mission::-webkit-scrollbar { width: 3px; }
+    .org-back-mission::-webkit-scrollbar-track { background: transparent; }
+    .org-back-mission::-webkit-scrollbar-thumb { background: rgba(232,231,244,0.15); border-radius: 9999px; }
 
     /* ── LOGIGRAMME ── */
     .logigramme-canvas {
@@ -950,7 +1037,7 @@ function filteredOrgs() {
     if (filterOrg    && o.id     !== filterOrg)    return false;
     if (filterPilier && o.pilier !== filterPilier) return false;
     if (q) {
-      const hay = [o.name, o.type, o.pilier, o.zone].join(' ').toLowerCase();
+      const hay = [o.name, o.type, o.pilier, o.mission, o.roleGouvernance, o.typeParticipation].join(' ').toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
@@ -1057,12 +1144,26 @@ function renderMembres() {
 // RENDER ORGANISATIONS
 // ══════════════════════════════════════════════
 
+const PILIER_COLORS_DARK = {
+  'Action sociale':                      '#7B6FE8',
+  'Soins de santé primaires':            '#1D9E75',
+  'Prévention et promotion de la santé': '#EF9F27',
+  'Santé mentale et assuétudes':         '#534AB7',
+};
+
+function flipOrgCard(event, id) {
+  event.stopPropagation();
+  const inner = document.getElementById('org-card-inner-' + id);
+  if (inner) inner.classList.toggle('flipped');
+}
+
 function renderOrgs() {
   const list    = document.getElementById('orgsList');
   const countEl = document.getElementById('orgsCount');
   const orgs    = filteredOrgs();
 
   countEl.textContent = `${orgs.length} organisation${orgs.length !== 1 ? 's' : ''}`;
+  list.className = 'orgs-grid';
 
   if (!orgs.length) {
     list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-text">Aucune organisation ne correspond aux filtres.</div></div>`;
@@ -1070,22 +1171,50 @@ function renderOrgs() {
   }
 
   list.innerHTML = orgs.map(org => {
-    const count = MEMBRES.filter(m => m.org === org.id).length;
-    const ps = PILIER_STYLES[org.pilier] || { bg:'#ecf1ff', color:'#515c70' };
+    const pc = PILIER_COLORS_DARK[org.pilier] || '#5B5A7A';
+
+    const pilierBadgeHtml = org.pilier
+      ? `<span class="org-dark-badge" style="background:${pc}28;color:${pc};border:1px solid ${pc}50">${org.pilier}</span>`
+      : '';
+    const roleHtml = org.roleGouvernance
+      ? `<span class="org-secondary-badge">${org.roleGouvernance}</span>`
+      : '';
+    const typeHtml = org.typeParticipation
+      ? `<span class="org-secondary-badge">${org.typeParticipation}</span>`
+      : '';
+
+    const logoHtml = org.logo
+      ? `<img src="${org.logo}" style="width:40px;height:40px;object-fit:cover;border-radius:10px;flex-shrink:0" alt="">`
+      : `<div class="org-card-logo" style="background:${org.color}">${org.abbr}</div>`;
+
+    const missionFront = org.mission
+      ? `<div class="org-mission-preview">${org.mission}</div>`
+      : '';
+    const missionBack = org.mission
+      ? `<div class="org-back-mission">${org.mission}</div>`
+      : `<div class="org-back-mission" style="opacity:0.3;font-style:italic">Aucune mission renseignée.</div>`;
+
     return `
-      <div class="org-row" onclick="openOrgDrawer(${JSON.stringify(org.id)})">
-        <div class="org-logo" style="background:${org.color}">${org.abbr}</div>
-        <div class="org-row-info">
-          <div class="org-row-name">${org.name}</div>
-          <div class="org-row-type">${org.type}</div>
+      <div class="org-card-wrapper">
+        <div class="org-card-inner" id="org-card-inner-${org.id}">
+          <div class="org-card-face org-card-front" onclick="openOrgDrawer(${JSON.stringify(org.id)})">
+            <div class="org-card-header">
+              ${logoHtml}
+              <div class="org-card-title-wrap">
+                <div class="org-card-name">${org.name}</div>
+                <div class="org-card-type">${org.type}</div>
+              </div>
+            </div>
+            <div class="org-card-badges">${pilierBadgeHtml}${roleHtml}${typeHtml}</div>
+            ${missionFront}
+            <button class="org-flip-btn" onclick="flipOrgCard(event, ${JSON.stringify(org.id)})">↻ Lire la mission complète</button>
+          </div>
+          <div class="org-card-face org-card-back">
+            <button class="org-back-btn" onclick="flipOrgCard(event, ${JSON.stringify(org.id)})">← Retour</button>
+            <div class="org-back-name">${org.name}</div>
+            ${missionBack}
+          </div>
         </div>
-        <div class="org-row-badges">
-          <span class="badge" style="background:${ps.bg};color:${ps.color}">${org.pilier}</span>
-          <span class="badge" style="background:#ecf1ff;color:#515c70">📍 ${org.zone}</span>
-          ${org.etp ? `<span class="badge" style="background:#ecf1ff;color:#515c70">⚡ ${org.etp} ETP</span>` : ''}
-          <span class="badge" style="background:#ecf1ff;color:#515c70">👥 ${count} membre${count!==1?'s':''}</span>
-        </div>
-        <span class="org-row-arrow">›</span>
       </div>`;
   }).join('');
 }
@@ -1224,24 +1353,24 @@ function openOrgDrawer(id) {
       </div>
     </div>
 
-    ${org.desc ? `<p class="drawer-desc">${org.desc}</p>` : ''}
+    ${org.mission ? `<p class="drawer-desc">${org.mission}</p>` : ''}
 
     <div class="drawer-section">
       <div class="drawer-section-title">Informations</div>
-      ${org.zone ? `
+      ${org.roleGouvernance ? `
       <div class="drawer-field">
-        <span class="drawer-field-label">Zone</span>
-        <span class="drawer-field-value">${org.zone}</span>
+        <span class="drawer-field-label">Rôle dans la gouvernance</span>
+        <span class="drawer-field-value">${org.roleGouvernance}</span>
       </div>` : ''}
-      ${org.etp ? `
+      ${org.typeParticipation ? `
       <div class="drawer-field">
-        <span class="drawer-field-label">ETP</span>
-        <span class="drawer-field-value">${org.etp}</span>
+        <span class="drawer-field-label">Type de participation</span>
+        <span class="drawer-field-value">${org.typeParticipation}</span>
       </div>` : ''}
-      ${org.financement ? `
+      ${org.email ? `
       <div class="drawer-field">
-        <span class="drawer-field-label">Financement</span>
-        <span class="drawer-field-value">${org.financement}</span>
+        <span class="drawer-field-label">Email</span>
+        <span class="drawer-field-value">${org.email}</span>
       </div>` : ''}
     </div>
 
@@ -1395,18 +1524,19 @@ function makeAbbr(name) {
 
 function mapOrgsData(raw) {
   return raw.map((o, i) => ({
-    id:          o.id,
-    name:        o.nom              || 'Organisation',
-    abbr:        makeAbbr(o.nom),
-    type:        o.typeDeStructure  || '',
-    pilier:      o.pilier           || 'Autres',
-    zone:        Array.isArray(o.zonesCouvertes) ? o.zonesCouvertes.join(', ') : (o.zonesCouvertes || ''),
-    etp:         typeof o.nombreETP === 'number' ? o.nombreETP : (parseInt(o.nombreETP) || 0),
-    logo:        o.logo             || null,
-    email:       o.emailDeContact   || '',
-    color:       ORG_PALETTE[i % ORG_PALETTE.length],
-    bg:          '#1C1B27',
-    icon:        'business'
+    id:                o.id,
+    name:              o.nom               || 'Organisation',
+    abbr:              makeAbbr(o.nom),
+    type:              o.typeDeStructure   || '',
+    pilier:            o.pilier            || '',
+    mission:           o.missions          || '',
+    roleGouvernance:   o.roleGouvernance   || '',
+    typeParticipation: o.typeParticipation || '',
+    logo:              o.logo              || null,
+    email:             o.emailDeContact    || '',
+    color:             ORG_PALETTE[i % ORG_PALETTE.length],
+    bg:                '#1C1B27',
+    icon:              'business'
   }));
 }
 
