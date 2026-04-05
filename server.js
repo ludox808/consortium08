@@ -62,20 +62,44 @@ function mapMembre(page) {
     nom: prop(p, "Nom", "title"),
     fonction: prop(p, "Fonction", "rich_text"),
     email: prop(p, "Email", "email"),
-    telephone: prop(p, "Téléphone", "phone_number"),
+    telephone: prop(p, "Telephone", "phone_number"),
     photo: prop(p, "Photo", "files"),
-    organisationLiee: prop(p, "Organisation liée", "relation")
+    organisationLiee: prop(p, "Organisation liee", "relation"),
+    statut: prop(p, "Statut", "select")
+  };
+}
 
-cat > Dockerfile << 'EOF'
-FROM node:20-alpine
+function mapOrganisation(page) {
+  const p = page.properties;
+  return {
+    id: page.id,
+    nom: prop(p, "Nom", "title"),
+    typeDeStructure: prop(p, "Type de structure", "select"),
+    pilier: prop(p, "Pilier", "select"),
+    missions: prop(p, "Missions", "rich_text"),
+    roleGouvernance: prop(p, "Role dans la gouvernance", "select"),
+    typeParticipation: prop(p, "Type de participation", "select"),
+    logo: prop(p, "Logo", "files"),
+    emailDeContact: prop(p, "Email de contact", "email")
+  };
+}
 
-WORKDIR /app
+function mapLien(page) {
+  const p = page.properties;
+  return {
+    id: page.id,
+    nom: prop(p, "Nom", "title"),
+    type: prop(p, "Type de lien", "select"),
+    membreA: prop(p, "Membre A", "relation")?.[0] || null,
+    membreB: prop(p, "Membre B", "relation")?.[0] || null
+  };
+}
 
-COPY package*.json ./
-RUN npm install --production
+app.use(express.static(path.join(__dirname)));
 
-COPY . .
+app.get("/api/data", async (req, res) => {
+  const token = process.env.NOTION_TOKEN;
+  if (!token) return res.status(500).json({ error: "NOTION_TOKEN not set" });
 
-EXPOSE 3000
+  try
 
-CMD ["node", "server.js"]
