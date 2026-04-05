@@ -64,7 +64,7 @@ function mapMembre(page) {
     email: prop(p, "Email", "email"),
     telephone: prop(p, "Téléphone", "phone_number"),
     photo: prop(p, "Photo", "files"),
-    organisationLiee: prop(p, "Organisation liée"
+    organisationLiee: prop(p, "Organisation liée", "relation")
 
 cat > Dockerfile << 'EOF'
 FROM node:20-alpine
