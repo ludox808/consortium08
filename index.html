@@ -1305,8 +1305,7 @@ function populateFilters() {
 
   const pilierSel = document.getElementById('filterPilier');
   pilierSel.innerHTML = '<option value=""></option>';
-  const piliers = [...new Set([...MEMBRES.map(m => m.pilier), ...ORGS.map(o => o.pilier)])].filter(Boolean).sort();
-  piliers.forEach(p => {
+  ['Action sociale', 'Soins de santé primaires', 'Prévention et promotion de la santé', 'Santé mentale et assuétudes'].forEach(p => {
     const opt = document.createElement('option');
     opt.value = p; opt.textContent = p;
     pilierSel.appendChild(opt);
@@ -1325,11 +1324,17 @@ function buildSidebar() {
      ...ORGS.map(o => ({ label:o.name, value:o.id, icon:'business', color:o.color }))],
     true
   );
+  const PILIERS_FIXED = [
+    { label:'Action sociale',                      value:'Action sociale',                      color:'#7B6FE8' },
+    { label:'Soins de santé primaires',            value:'Soins de santé primaires',            color:'#1D9E75' },
+    { label:'Prévention et promotion de la santé', value:'Prévention et promotion de la santé', color:'#EF9F27' },
+    { label:'Santé mentale et assuétudes',         value:'Santé mentale et assuétudes',         color:'#534AB7' },
+  ];
   buildSidebarGroup(
     document.getElementById('sidebarPiliers'),
     'filterPilier',
     [{ label:'Tous', value:'', icon:'category' },
-     ...[...new Set(MEMBRES.map(m => m.pilier))].filter(Boolean).sort().map(p => ({ label:p, value:p, icon:'label' }))],
+     ...PILIERS_FIXED.map(p => ({ label:p.label, value:p.value, icon:'label', color:p.color }))],
     false
   );
 }
