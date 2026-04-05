@@ -255,167 +255,102 @@
     }
     .results-count { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; }
 
-    /* ── BENTO GRID ── */
+    /* ── MEMBRES GRID ── */
     .members-grid {
       display: grid;
-      grid-template-columns: repeat(12, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
     }
     .members-grid.compact {
       grid-template-columns: repeat(6, 1fr);
       gap: 12px;
     }
-    .bento-featured { grid-column: span 7; }
-    .bento-featured.solo { grid-column: span 12; }
-    .bento-side-stack { grid-column: span 5; display: flex; flex-direction: column; gap: 16px; }
-    .standard-card-wrap { grid-column: span 4; }
 
-    /* ── CARD BASE ── */
-    .stitch-card {
+    /* ── MEMBRE CARD (detailed) ── */
+    .membre-card {
       background: var(--surface);
       border-radius: 1.5rem;
-      box-shadow: var(--shadow-md);
-      transition: transform 0.2s;
+      box-shadow: var(--shadow-sm);
       overflow: hidden;
-    }
-    .stitch-card:hover { transform: translateY(-4px); }
-    .stitch-card.no-hover:hover { transform: none; }
-
-    /* ── FEATURED CARD ── */
-    .featured-card {
-      padding: 28px;
       cursor: pointer;
+      transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+      border: 1.5px solid transparent;
+      position: relative;
     }
-    .featured-card-inner { display: flex; gap: 28px; align-items: flex-start; }
-    .featured-avatar-wrap { position: relative; flex-shrink: 0; }
-    .featured-avatar {
-      width: 160px;
-      height: 200px;
-      border-radius: 1rem;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .featured-avatar-badge {
+    .membre-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: rgba(70,71,211,0.22); }
+    .mc-org-badges {
       position: absolute;
-      bottom: -10px;
-      right: -10px;
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
+      top: 12px;
+      right: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      align-items: flex-end;
+      z-index: 2;
+    }
+    .mc-org-badge-group { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+    .mc-org-pill {
+      background: rgba(255,255,255,0.92);
+      color: var(--text);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      white-space: nowrap;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      max-width: 130px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mc-pilier-pill {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      white-space: nowrap;
+    }
+    .mc-photo {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/3;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
+      overflow: hidden;
+    }
+    .mc-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .mc-initials { font-size: 52px; font-weight: 800; color: rgba(255,255,255,0.9); }
+    .mc-logo {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,0.4);
+    }
+    .mc-logo-abbr {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
       font-weight: 800;
       color: white;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
     }
-    .featured-card-info { flex: 1; min-width: 0; padding-top: 4px; }
-    .featured-name { font-size: 28px; font-weight: 800; color: var(--text); letter-spacing: -0.8px; line-height: 1.1; }
-    .featured-role { font-weight: 700; font-size: 15px; margin-top: 4px; }
-    .featured-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin: 18px 0;
-    }
-    .stat-box {
-      background: var(--surface-low);
-      border-radius: 14px;
-      padding: 14px 10px;
-      text-align: center;
-    }
-    .stat-value { display: block; font-size: 22px; font-weight: 800; color: var(--primary); line-height: 1; }
-    .stat-label { font-size: 9px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); opacity: 0.65; letter-spacing: 0.06em; margin-top: 4px; display: block; }
-    .gradient-btn {
-      width: 100%;
-      padding: 14px;
-      background: var(--gradient);
-      color: white;
-      border: none;
-      border-radius: 9999px;
-      font-weight: 700;
-      font-size: 14px;
-      font-family: inherit;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      box-shadow: var(--shadow-accent);
-      transition: opacity 0.2s, transform 0.2s;
-    }
-    .gradient-btn:hover { opacity: 0.92; transform: scale(1.01); }
-
-    /* ── SIDE CARD ── */
-    .side-card {
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      cursor: pointer;
-      flex: 1;
-    }
-    .side-avatar {
-      width: 72px;
-      height: 72px;
-      border-radius: 9999px;
-      overflow: hidden;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 3px solid var(--surface-high);
-    }
-    .side-avatar-initials { font-size: 20px; font-weight: 800; }
-    .side-card-info { flex: 1; min-width: 0; }
-    .side-card-name { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
-    .side-card-role { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-bottom: 8px; }
-    .side-card-meta { display: flex; gap: 14px; font-size: 12px; color: var(--text-muted); flex-wrap: wrap; }
-    .side-card-meta span { display: flex; align-items: center; gap: 3px; }
-    .side-card-meta .material-symbols-outlined { font-size: 14px; }
-
-    /* ── STANDARD CARD ── */
-    .standard-card {
-      padding: 20px;
-      cursor: pointer;
-    }
-    .std-card-img {
-      width: 100%;
-      height: 130px;
-      border-radius: 12px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 14px;
-    }
-    .std-card-initials { font-size: 40px; font-weight: 800; }
-    .std-card-name { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 2px; }
-    .std-card-role { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px; }
-    .std-card-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 12px;
-      border-top: 1px solid var(--border);
-      margin-top: 10px;
-    }
-    .std-card-conn { font-size: 11px; font-weight: 800; color: var(--text-muted); opacity: 0.65; text-transform: uppercase; letter-spacing: 0.05em; }
-    .icon-btn {
-      width: 30px; height: 30px;
-      background: var(--surface-low);
-      color: var(--primary);
-      border: none;
-      border-radius: 9999px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .icon-btn .material-symbols-outlined { font-size: 15px; }
+    .mc-body { padding: 14px 16px 16px; }
+    .mc-name { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 4px; letter-spacing: -0.3px; }
+    .mc-fonction { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-bottom: 8px; line-height: 1.4; }
+    .mc-meta { display: flex; flex-direction: column; gap: 3px; margin-bottom: 2px; }
+    .mc-meta-line { font-size: 12px; color: var(--text-muted); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mc-conn { font-size: 11px; color: var(--text-muted); opacity: 0.55; font-weight: 700; margin-top: 8px; letter-spacing: 0.01em; }
 
     /* ── COMPACT CARD ── */
     .compact-card {
@@ -437,7 +372,7 @@
       justify-content: center;
       margin-bottom: 8px;
     }
-    .compact-initials { font-size: 22px; font-weight: 800; }
+    .compact-initials { font-size: 22px; font-weight: 800; color: rgba(255,255,255,0.9); }
     .compact-org-chip {
       position: absolute;
       bottom: 5px;
@@ -930,12 +865,21 @@ const LINK_STYLES = {
 };
 
 const PILIER_STYLES = {
-  'Soins':        { bg:'#d5f2e8', color:'#0a6040' },
-  'Social':       { bg:'#ede5ff', color:'#4a1aaa' },
-  'Médical':      { bg:'#dceeff', color:'#1550a0' },
-  'Coordination': { bg:'#feecd5', color:'#8a4a10' },
-  'Prévention':   { bg:'#ffe4f4', color:'#7a2060' }
+  'Soins de santé primaires':            { bg:'#d5f2e8', color:'#1D9E75' },
+  'Action sociale':                      { bg:'#ede5ff', color:'#7B6FE8' },
+  'Santé mentale et assuétudes':         { bg:'#e4e1ff', color:'#534AB7' },
+  'Prévention et promotion de la santé': { bg:'#fef3e0', color:'#EF9F27' },
 };
+
+function pilierColor(pilier) {
+  const c = {
+    'Soins de santé primaires':            '#1D9E75',
+    'Action sociale':                      '#7B6FE8',
+    'Santé mentale et assuétudes':         '#534AB7',
+    'Prévention et promotion de la santé': '#EF9F27',
+  };
+  return c[pilier] || '#3D3C52';
+}
 
 // ══════════════════════════════════════════════
 // STATE
@@ -1017,130 +961,66 @@ function filteredOrgs() {
 // CARD GENERATORS
 // ══════════════════════════════════════════════
 
-function featuredCard(m, solo) {
-  const org = getOrg(m.org);
+function membreCard(m) {
+  const orgIds = m.orgs && m.orgs.length ? m.orgs : (m.org ? [m.org] : []);
+  const orgs = orgIds.map(id => getOrg(id)).filter(Boolean);
+  const firstOrg = orgs[0] || null;
+  const photoBg = pilierColor(firstOrg?.pilier || '');
   const connCount = getConnectedMembers(m.id).length;
   const ini = initials(m.prenom, m.nom);
-  const avBg = org ? org.color + '1e' : '#dee8ff';
-  const avColor = org ? org.color : '#4647d3';
-  const safeId = CSS.escape ? CSS.escape(m.id) : m.id;
 
-  return `
-    <div class="stitch-card bento-featured${solo ? ' solo' : ''}">
-      <div class="featured-card" onclick="openMemberDrawer(${JSON.stringify(m.id)})">
-        <div class="featured-card-inner">
-          <div class="featured-avatar-wrap">
-            <div class="featured-avatar" style="background:${avBg}">
-              ${m.photo
-                ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover">`
-                : `<div style="font-size:52px;font-weight:800;color:${avColor}">${ini}</div>`
-              }
-            </div>
-            ${org ? `<div class="featured-avatar-badge" style="background:${org.color}">${org.abbr}</div>` : ''}
-          </div>
-          <div class="featured-card-info">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
-              <div>
-                <div class="featured-name">${m.prenom} ${m.nom}</div>
-                <div class="featured-role" style="color:${org?.color || '#4647d3'}">${m.role}</div>
-              </div>
-              ${orgBadge(org)}
-            </div>
-            <div class="featured-stats">
-              <div class="stat-box">
-                <span class="stat-value">${connCount}</span>
-                <span class="stat-label">Connexions</span>
-              </div>
-              <div class="stat-box">
-                <span class="stat-value">${org?.etp ?? '—'}</span>
-                <span class="stat-label">ETP org.</span>
-              </div>
-              <div class="stat-box">
-                <span class="stat-value" style="font-size:13px;padding-top:4px">${m.pilier || '—'}</span>
-                <span class="stat-label">Pilier</span>
-              </div>
-            </div>
-            <button class="gradient-btn" onclick="event.stopPropagation();switchView('logigramme')">
-              Voir le Logigramme Collaboratif
-              <span class="material-symbols-outlined" style="font-size:18px">arrow_forward</span>
-            </button>
-          </div>
-        </div>
-      </div>
+  const badgesHtml = orgs.map(org => {
+    const ps = PILIER_STYLES[org.pilier];
+    return `<div class="mc-org-badge-group">
+      <span class="mc-org-pill">${org.name}</span>
+      ${org.pilier && ps ? `<span class="mc-pilier-pill" style="background:${ps.bg};color:${ps.color}">${org.pilier}</span>` : ''}
     </div>`;
-}
+  }).join('');
 
-function sideCard(m) {
-  const org = getOrg(m.org);
-  const connCount = getConnectedMembers(m.id).length;
-  const ini = initials(m.prenom, m.nom);
-  const avBg = org ? org.color + '1e' : '#dee8ff';
-  const avColor = org ? org.color : '#4647d3';
+  const photoContent = m.photo
+    ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover" alt="">`
+    : `<div class="mc-initials">${ini}</div>`;
+
+  const logoHtml = firstOrg
+    ? (firstOrg.logo
+        ? `<img class="mc-logo" src="${firstOrg.logo}" alt="${firstOrg.name}">`
+        : `<div class="mc-logo-abbr" style="background:${firstOrg.color}">${firstOrg.abbr}</div>`)
+    : '';
+
   return `
-    <div class="stitch-card" style="flex:1">
-      <div class="side-card" onclick="openMemberDrawer(${JSON.stringify(m.id)})">
-        <div class="side-avatar" style="background:${avBg};border-color:${org?.color+'22'||'#dee8ff'}">
-          ${m.photo
-            ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover">`
-            : `<div class="side-avatar-initials" style="color:${avColor}">${ini}</div>`
-          }
-        </div>
-        <div class="side-card-info">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start">
-            <div class="side-card-name">${m.prenom} ${m.nom}</div>
-            ${orgBadge(org)}
-          </div>
-          <div class="side-card-role">${m.role}</div>
-          <div class="side-card-meta">
-            <span><span class="material-symbols-outlined">hub</span>${connCount} connexion${connCount!==1?'s':''}</span>
-            <span><span class="material-symbols-outlined">location_on</span>${org?.zone||'Liège'}</span>
-          </div>
-        </div>
+    <div class="membre-card" onclick="openMemberDrawer(${JSON.stringify(m.id)})">
+      <div class="mc-org-badges">${badgesHtml}</div>
+      <div class="mc-photo" style="background:${photoBg}">
+        ${photoContent}
+        ${logoHtml}
       </div>
-    </div>`;
-}
-
-function standardCard(m) {
-  const org = getOrg(m.org);
-  const connCount = getConnectedMembers(m.id).length;
-  const ini = initials(m.prenom, m.nom);
-  const avBg = org ? org.color + '1e' : '#dee8ff';
-  const avColor = org ? org.color : '#4647d3';
-  return `
-    <div class="stitch-card standard-card-wrap">
-      <div class="standard-card" onclick="openMemberDrawer(${JSON.stringify(m.id)})">
-        <div class="std-card-img" style="background:${avBg}">
-          ${m.photo
-            ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover">`
-            : `<div class="std-card-initials" style="color:${avColor}">${ini}</div>`
-          }
+      <div class="mc-body">
+        <div class="mc-name">${m.prenom} ${m.nom}</div>
+        ${m.role ? `<div class="mc-fonction">${m.role}</div>` : ''}
+        <div class="mc-meta">
+          ${m.email ? `<div class="mc-meta-line">${m.email}</div>` : ''}
+          ${m.tel   ? `<div class="mc-meta-line">${m.tel}</div>` : ''}
         </div>
-        <div class="std-card-name">${m.prenom} ${m.nom}</div>
-        <div class="std-card-role" style="color:${org?.color||'#4647d3'}">${m.role}</div>
-        ${orgBadge(org)}
-        <div class="std-card-footer">
-          <span class="std-card-conn">${connCount} connexion${connCount!==1?'s':''}</span>
-          <button class="icon-btn" onclick="event.stopPropagation();openMemberDrawer(${JSON.stringify(m.id)})">
-            <span class="material-symbols-outlined">link</span>
-          </button>
-        </div>
+        ${connCount > 0 ? `<div class="mc-conn">✦ ${connCount} connexion${connCount !== 1 ? 's' : ''}</div>` : ''}
       </div>
     </div>`;
 }
 
 function compactCard(m) {
-  const org = getOrg(m.org);
+  const orgIds = m.orgs && m.orgs.length ? m.orgs : (m.org ? [m.org] : []);
+  const firstOrg = orgIds.map(id => getOrg(id)).find(Boolean) || null;
+  const bg = pilierColor(firstOrg?.pilier || '');
   const ini = initials(m.prenom, m.nom);
-  const avBg = org ? org.color + '1e' : '#dee8ff';
-  const avColor = org ? org.color : '#4647d3';
   return `
     <div class="compact-card" onclick="openMemberDrawer(${JSON.stringify(m.id)})">
-      <div class="compact-photo" style="background:${avBg}">
+      <div class="compact-photo" style="background:${bg}">
         ${m.photo
-          ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover">`
-          : `<div class="compact-initials" style="color:${avColor}">${ini}</div>`
+          ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover" alt="">`
+          : `<div class="compact-initials">${ini}</div>`
         }
-        ${org ? `<div class="compact-org-chip" style="background:${org.color}">${org.abbr}</div>` : ''}
+        ${firstOrg ? (firstOrg.logo
+          ? `<img style="position:absolute;bottom:4px;right:4px;width:20px;height:20px;border-radius:5px;object-fit:cover;border:1.5px solid rgba(255,255,255,0.4)" src="${firstOrg.logo}" alt="">`
+          : `<div class="compact-org-chip" style="background:${firstOrg.color}">${firstOrg.abbr}</div>`) : ''}
       </div>
       <div class="compact-name">${m.prenom} ${m.nom}</div>
     </div>`;
@@ -1170,18 +1050,7 @@ function renderMembres() {
   }
 
   grid.className = 'members-grid';
-  let html = '';
-
-  html += featuredCard(list[0], list.length === 1);
-
-  if (list.length > 1) {
-    const sideMembers = list.slice(1, Math.min(3, list.length));
-    html += `<div class="bento-side-stack">${sideMembers.map(m => sideCard(m)).join('')}</div>`;
-  }
-
-  list.slice(3).forEach(m => { html += standardCard(m); });
-
-  grid.innerHTML = html;
+  grid.innerHTML = list.map(m => membreCard(m)).join('');
 }
 
 // ══════════════════════════════════════════════
@@ -1556,14 +1425,16 @@ function mapLinkType(type) {
 function mapMembresData(raw, orgMap) {
   return raw.map(m => {
     const { prenom, nom } = splitNom(m.nom);
-    const orgId = Array.isArray(m.organisationLiee) && m.organisationLiee.length > 0 ? m.organisationLiee[0] : null;
+    const orgIds = Array.isArray(m.organisationLiee) ? m.organisationLiee : [];
+    const orgId = orgIds[0] || null;
     const org = orgId ? orgMap[orgId] : null;
     return {
       id:     m.id,
       prenom,
       nom,
       org:    orgId,
-      pilier: org?.pilier || 'Autres',
+      orgs:   orgIds,
+      pilier: org?.pilier || '',
       role:   m.fonction  || m.statut || '',
       email:  m.email     || '',
       tel:    m.telephone || '',
