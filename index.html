@@ -1504,7 +1504,7 @@ function applyFilters() {
 // ══════════════════════════════════════════════
 
 async function fetchAll() {
-  const resp = await fetch('/api/getData');
+  const resp = await fetch('/api/data');
   const json = await resp.json();
   if (!resp.ok) throw new Error(json.error || `HTTP ${resp.status}`);
   return json;
