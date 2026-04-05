@@ -1,17 +1,13 @@
 const express = require("express");
 const path = require("path");
-
 const app = express();
 const PORT = process.env.PORT || 3000;
-
 const NOTION_VERSION = "2022-06-28";
-
 const DB_IDS = {
   membres: "d3f693e5072c42dab660c132d3eafd97",
   organisations: "deae78249795400582c4337938eb06ee",
   liens: "c77e663666ba40baa3520c976d84d97c"
 };
-
 function prop(properties, name, type) {
   const p = properties[name];
   if (!p) return null;
@@ -29,13 +25,12 @@ function prop(properties, name, type) {
     default: return null;
   }
 }
-
 async function queryDB(id, token) {
   const results = [];
   let cursor = undefined;
   do {
     const body = cursor ? { start_cursor: cursor } : {};
-    const resp = await fetch(`https://api.notion.com/v1/databases/${id}/query`, {
+    const resp = await fetch("https://api.notion.com/v1/databases/" + id + "/query", {
       method: "POST",
       headers: {
         "Authorization": "Bearer " + token,
@@ -46,7 +41,7 @@ async function queryDB(id, token) {
     });
     if (!resp.ok) {
       const text = await resp.text();
-      throw new Error(`Notion API error ${resp.status}: ${text}`);
+      throw new Error("Notion API error " + resp.status + ": " + text);
     }
     const data = await resp.json();
     results.push(...data.results);
@@ -54,7 +49,6 @@ async function queryDB(id, token) {
   } while (cursor);
   return results;
 }
-
 function mapMembre(page) {
   const p = page.properties;
   return {
@@ -68,7 +62,6 @@ function mapMembre(page) {
     statut: prop(p, "Statut", "select")
   };
 }
-
 function mapOrganisation(page) {
   const p = page.properties;
   return {
@@ -83,7 +76,6 @@ function mapOrganisation(page) {
     emailDeContact: prop(p, "Email de contact", "email")
   };
 }
-
 function mapLien(page) {
   const p = page.properties;
   return {
@@ -94,12 +86,24 @@ function mapLien(page) {
     membreB: prop(p, "Membre B", "relation")?.[0] || null
   };
 }
-
 app.use(express.static(path.join(__dirname)));
-
 app.get("/api/data", async (req, res) => {
   const token = process.env.NOTION_TOKEN;
   if (!token) return res.status(500).json({ error: "NOTION_TOKEN not set" });
-
-  try
-
+  try {
+    const [rawMembres, rawOrgs, rawLiens] = await Promise.all([
+      queryDB(DB_IDS.membres, token),
+      queryDB(DB_IDS.organisations, token),
+      queryDB(DB_IDS.liens, token)
+    ]);
+    res.json({
+      members: rawMembres.map(mapMembre),
+      organisations: rawOrgs.map(mapOrganisation),
+      liens: rawLiens.map(mapLien)
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+app.listen(PORT, () => console.log("Server running on port " + PORT));
