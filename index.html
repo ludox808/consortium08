@@ -1184,7 +1184,7 @@ function renderOrgs() {
       : '';
 
     const logoHtml = org.logo
-      ? `<img src="${org.logo}" style="width:40px;height:40px;object-fit:cover;border-radius:10px;flex-shrink:0" alt="">`
+      ? `<img src="${org.logo}" style="max-width:120px;max-height:50px;width:auto;height:auto;object-fit:contain;border-radius:6px;flex-shrink:0" alt="">`
       : `<div class="org-card-logo" style="background:${org.color}">${org.abbr}</div>`;
 
     const missionFront = org.mission
