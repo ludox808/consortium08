@@ -1207,10 +1207,10 @@ function renderOrgs() {
             </div>
             <div class="org-card-badges">${pilierBadgeHtml}${roleHtml}${typeHtml}</div>
             ${missionFront}
-            <button class="org-flip-btn" onclick="flipOrgCard(event, ${JSON.stringify(org.id)})">↻ Lire la mission complète</button>
+                <button class="org-flip-btn" onclick="flipOrgCard(event, '${org.id}')">↺ Lire la mission complète</button>
           </div>
           <div class="org-card-face org-card-back">
-            <button class="org-back-btn" onclick="flipOrgCard(event, ${JSON.stringify(org.id)})">← Retour</button>
+                <button class="org-back-btn" onclick="flipOrgCard(event, '${org.id}')">← Retour</button>
             <div class="org-back-name">${org.name}</div>
             ${missionBack}
           </div>
