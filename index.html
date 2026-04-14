@@ -533,23 +533,32 @@
       border: 1px solid rgba(42,41,56,0.6);
       box-shadow: inset 0 4px 24px rgba(0,0,0,0.3);
     }
-    .logigramme-inner { position: relative; width: 1100px; height: 640px; }
-    .logigramme-svg { position: absolute; top: 0; left: 0; width: 1100px; height: 640px; pointer-events: none; }
-    .log-card {
+    .logigramme-inner { position: relative; width: 1200px; height: 700px; }
+    .logigramme-svg { position: absolute; top: 0; left: 0; width: 1200px; height: 700px; pointer-events: none; }
+    .org-node {
       position: absolute;
-      width: 110px;
+      width: 140px;
       background: #1C1B27;
       border: 1.5px solid #2A2938;
-      border-radius: 14px;
-      overflow: hidden;
+      border-radius: 16px;
       cursor: pointer;
+      padding: 14px 10px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      box-sizing: border-box;
       transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      z-index: 2;
     }
-    .log-card:hover { border-color: #7B6FE8; transform: scale(1.06); box-shadow: 0 8px 28px rgba(0,0,0,0.5); z-index: 10; }
-    .log-card-photo-wrap { position: relative; width: 110px; height: 110px; }
-    .log-card-initials { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; color: #fff; }
-    .log-card-org-logo { position: absolute; bottom: 5px; right: 5px; width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 7px; font-weight: 800; color: #fff; border: 1.5px solid rgba(255,255,255,0.15); }
-    .log-card-name { font-size: 10px; font-weight: 700; color: #E8E7F4; padding: 5px 6px; text-align: center; line-height: 1.3; }
+    .org-node:hover { border-color: #7B6FE8; transform: scale(1.04); box-shadow: 0 8px 32px rgba(0,0,0,0.55); z-index: 10; }
+    .org-node-logo-wrap { display: flex; align-items: center; justify-content: center; height: 64px; }
+    .org-node-logo { max-width: 80px; max-height: 60px; width: auto; height: auto; object-fit: contain; }
+    .org-node-abbr { width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; color: white; flex-shrink: 0; }
+    .org-node-name { font-size: 10px; font-weight: 700; color: #E8E7F4; text-align: center; line-height: 1.3; }
+    .org-node-avatars { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 3px; margin-top: 2px; }
+    .org-node-avatar { width: 36px; height: 36px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255,255,255,0.35); cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: transform 0.15s; }
+    .org-node-avatar:hover { transform: scale(1.15); z-index: 5; position: relative; }
 
     .logigramme-legend {
       background: var(--surface);
@@ -958,7 +967,7 @@
     </div>
     <div class="logigramme-canvas">
       <div class="logigramme-inner" id="logigrammeInner">
-        <svg class="logigramme-svg" id="logigrammeSvg" viewBox="0 0 1100 640" xmlns="http://www.w3.org/2000/svg"></svg>
+        <svg class="logigramme-svg" id="logigrammeSvg" viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
     </div>
     <div class="logigramme-legend">
@@ -1311,44 +1320,106 @@ function renderOrgs() {
 // ══════════════════════════════════════════════
 
 function renderLogigramme() {
-  const inner = document.getElementById('logigrammeInner');
-  const svg   = document.getElementById('logigrammeSvg');
-  const HALF  = 55;
+  const container = document.getElementById('logigrammeInner');
+  const svg       = document.getElementById('logigrammeSvg');
 
-  inner.querySelectorAll('.log-card').forEach(el => el.remove());
+  container.querySelectorAll('.org-node').forEach(el => el.remove());
 
-  svg.innerHTML = LIENS.map(lien => {
-    const from = getMembre(lien.from);
-    const to   = getMembre(lien.to);
-    if (!from || !to) return '';
-    const ls   = LINK_STYLES[lien.type] || LINK_STYLES.collabore;
-    const x1   = from.logPos.x + HALF, y1 = from.logPos.y + HALF;
-    const x2   = to.logPos.x   + HALF, y2 = to.logPos.y   + HALF;
-    const dash = ls.dash ? `stroke-dasharray="7 4"` : '';
-    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${ls.color}" stroke-width="2" ${dash} opacity="0.7" stroke-linecap="round"/>`;
-  }).join('');
+  const N = ORGS.length;
+  if (!N) { svg.innerHTML = ''; return; }
 
-  MEMBRES.forEach(m => {
-    const org        = getOrg(m.org);
-    const ini        = initials(m.prenom, m.nom);
-    const photoBg    = org ? org.color + '28' : '#2A2938';
-    const photoColor = org ? org.color : '#E8E7F4';
+  // Layout constants
+  const CW = 1200, CH = 700;
+  const CX = CW / 2, CY = CH / 2 - 10;
+  const NODE_W = 140, NODE_H = 160;
+  const R = N === 1 ? 0 : Math.min(240, Math.max(180, N * 52));
 
-    const card = document.createElement('div');
-    card.className = 'log-card';
-    card.style.left = m.logPos.x + 'px';
-    card.style.top  = m.logPos.y + 'px';
-    card.onclick = () => openMemberDrawer(m.id);
-    card.innerHTML = `
-      <div class="log-card-photo-wrap">
-        ${m.photo
-          ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover;display:block" alt="">`
-          : `<div class="log-card-initials" style="background:${photoBg};color:${photoColor}">${ini}</div>`
-        }
-        ${org ? `<div class="log-card-org-logo" style="background:${org.color}">${org.abbr}</div>` : ''}
-      </div>
-      <div class="log-card-name">${m.prenom}<br>${m.nom}</div>`;
-    inner.appendChild(card);
+  // Compute circular positions for each org
+  const positions = {};
+  ORGS.forEach((org, i) => {
+    const angle = (2 * Math.PI * i / N) - Math.PI / 2;
+    const x = Math.round(CX + R * Math.cos(angle) - NODE_W / 2);
+    const y = Math.round(CY + R * Math.sin(angle) - NODE_H / 2);
+    positions[org.id] = { x, y, cx: x + NODE_W / 2, cy: y + NODE_H / 2 };
+  });
+
+  // Group liens by org pair (skip same-org and unknown orgs)
+  const pairMap = new Map();
+  LIENS.forEach(lien => {
+    const mA = getMembre(lien.from);
+    const mB = getMembre(lien.to);
+    if (!mA?.org || !mB?.org || mA.org === mB.org) return;
+    const [idA, idB] = [mA.org, mB.org].sort();
+    const key = `${idA}|${idB}`;
+    if (!pairMap.has(key)) pairMap.set(key, { orgA: idA, orgB: idB, entries: [] });
+    pairMap.get(key).entries.push({ lien, mA, mB });
+  });
+
+  // Build SVG
+  const svgParts = [];
+
+  pairMap.forEach(({ orgA, orgB, entries }) => {
+    const posA = positions[orgA];
+    const posB = positions[orgB];
+    if (!posA || !posB) return;
+
+    const ls   = LINK_STYLES[entries[0].lien.type] || LINK_STYLES.collabore;
+    const dash = ls.dash ? 'stroke-dasharray="8 5"' : '';
+    const mx   = (posA.cx + posB.cx) / 2;
+    const my   = (posA.cy + posB.cy) / 2;
+
+    // Line
+    svgParts.push(`<line x1="${posA.cx}" y1="${posA.cy}" x2="${posB.cx}" y2="${posB.cy}" stroke="${ls.color}" stroke-width="2.5" ${dash} opacity="0.75" stroke-linecap="round"/>`);
+
+    // Label: up to 2 member-pair first names
+    const labels = entries.slice(0, 2).map(e => `${e.mA.prenom} ↔ ${e.mB.prenom}`);
+    const labelText = labels.join('  ·  ');
+    const extraCount = entries.length - 2;
+    const pillW  = Math.min(Math.max(labelText.length * 6.5 + 16, 80), 200);
+    const pillH  = 18;
+    const halfPW = pillW / 2;
+
+    svgParts.push(`<g>
+      <rect x="${mx - halfPW}" y="${my - pillH / 2}" width="${pillW}" height="${pillH}" rx="${pillH / 2}" fill="rgba(14,13,24,0.88)" stroke="${ls.color}" stroke-width="0.8" stroke-opacity="0.6"/>
+      <text x="${mx}" y="${my + 4.5}" text-anchor="middle" font-size="9.5" font-family="system-ui,sans-serif" fill="#C8C7D8" font-weight="600">${labelText}</text>
+      ${extraCount > 0 ? `
+        <circle cx="${mx + halfPW + 11}" cy="${my}" r="10" fill="${ls.color}"/>
+        <text x="${mx + halfPW + 11}" y="${my + 4}" text-anchor="middle" font-size="9" font-family="system-ui,sans-serif" fill="white" font-weight="700">+${extraCount}</text>
+      ` : ''}
+    </g>`);
+  });
+
+  svg.innerHTML = svgParts.join('');
+
+  // Create org nodes
+  ORGS.forEach(org => {
+    const pos = positions[org.id];
+    if (!pos) return;
+
+    const orgMembers = MEMBRES.filter(m => m.org === org.id);
+
+    const logoHtml = org.logo
+      ? `<img src="${org.logo}" class="org-node-logo" alt="${org.name}">`
+      : `<div class="org-node-abbr" style="background:${org.color}">${org.abbr}</div>`;
+
+    const avatarsHtml = orgMembers.map(m => {
+      const ini   = initials(m.prenom, m.nom);
+      const inner = m.photo
+        ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover" alt="">`
+        : `<span style="font-size:11px;font-weight:800;color:white">${ini}</span>`;
+      return `<div class="org-node-avatar" style="${!m.photo ? `background:${org.color}` : ''}" onclick="event.stopPropagation();openMemberDrawer(${JSON.stringify(m.id)})" title="${m.prenom} ${m.nom}">${inner}</div>`;
+    }).join('');
+
+    const node = document.createElement('div');
+    node.className = 'org-node';
+    node.style.left = pos.x + 'px';
+    node.style.top  = pos.y + 'px';
+    node.onclick = () => openOrgDrawer(org.id);
+    node.innerHTML = `
+      <div class="org-node-logo-wrap">${logoHtml}</div>
+      <div class="org-node-name">${org.name}</div>
+      ${orgMembers.length ? `<div class="org-node-avatars">${avatarsHtml}</div>` : ''}`;
+    container.appendChild(node);
   });
 }
 
