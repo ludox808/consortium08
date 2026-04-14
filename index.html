@@ -778,7 +778,8 @@
         .sidebar { display: none; position: relative; width: 100%; height: auto; top: auto; left: auto; }
         .sidebar.open { display: flex; flex-direction: column; }
 
-      .app-layout { flex-direction: column; }
+        :root { --sidebar-w: 0px; }
+        .app-layout { flex-direction: column; }
       .sidebar {
         width: 100% !important;
         border-radius: 0;
@@ -789,7 +790,7 @@
       .sidebar-section { margin-bottom: 8px; }
       .sidebar-filters { display: flex; flex-wrap: wrap; gap: 6px; }
       .sidebar-item { padding: 6px 10px; font-size: 13px; }
-      .main-content { padding: 16px; }
+        .main-content { padding: 16px; margin-left: 0; width: 100%; box-sizing: border-box; }
       .navbar {
         padding: 0 12px;
         border-radius: 0;
