@@ -772,7 +772,12 @@
       text-align: center;
     }
   
+    #menuToggle { display: none; }
     @media (max-width: 768px) {
+      #menuToggle { display: block !important; }
+      .sidebar { display: none; }
+      .sidebar.open { display: block; }
+
       .app-layout { flex-direction: column; }
       .sidebar {
         width: 100% !important;
@@ -844,6 +849,7 @@
 <!-- ── FLOATING PILL NAVBAR ── -->
 <nav class="navbar">
   <div class="navbar-logo">Consortium <span>08</span></div>
+        <button id="menuToggle" onclick="toggleSidebar()" style="display:none; background:none; border:none; cursor:pointer; padding:8px; font-size:22px; color:var(--primary);">☰</button>
   <div class="navbar-tabs">
     <button class="tab active" data-view="organisations">Organisations</button>
     <button class="tab" data-view="membres">Membres</button>
@@ -1678,6 +1684,10 @@ function setStep(step, state) {
 // ══════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════
+
+function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('open');
+}
 
 async function initApp() {
   const banner = document.getElementById('errorBanner');
