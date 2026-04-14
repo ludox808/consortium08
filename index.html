@@ -660,6 +660,24 @@
     .connection-name { font-weight: 700; color: var(--text); }
     .connection-type { font-size: 11px; margin-top: 2px; font-weight: 600; }
     .connection-pip { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    /* ── MEMBER DRAWER PHOTO HEADER ── */
+    .drawer-member-photo { overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .drawer-org-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 4px 12px 4px 4px;
+      background: var(--surface-low);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      cursor: pointer;
+      font-size: 12px; font-weight: 700; color: var(--text); font-family: inherit;
+      transition: background 0.15s;
+      text-decoration: none;
+    }
+    .drawer-org-badge:hover { background: var(--surface-container); }
+    .drawer-org-badge-logo { width: 28px; height: 28px; border-radius: 8px; object-fit: contain; flex-shrink: 0; }
+    .drawer-org-badge-abbr { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: white; flex-shrink: 0; }
+    .drawer-field-value a { color: var(--primary); text-decoration: none; }
+    .drawer-field-value a:hover { text-decoration: underline; }
     .members-mini { display: flex; flex-direction: column; gap: 6px; }
     .member-mini {
       display: flex; align-items: center; gap: 10px;
@@ -1430,18 +1448,36 @@ function renderLogigramme() {
 function openMemberDrawer(id) {
   const m = getMembre(id);
   if (!m) return;
-  const org = getOrg(m.org);
+  const org         = getOrg(m.org);
   const connections = getConnectedMembers(m.id);
+  const ini         = initials(m.prenom, m.nom);
+  const photoBg     = org?.color || '#3D3C52';
+
+  // Clickable org badge with logo
+  const orgBadgeHtml = org ? `
+    <button class="drawer-org-badge" onclick="openOrgDrawer(${JSON.stringify(org.id)})">
+      ${org.logo
+        ? `<img src="${org.logo}" class="drawer-org-badge-logo" alt="">`
+        : `<div class="drawer-org-badge-abbr" style="background:${org.color}">${org.abbr}</div>`
+      }
+      <span>${org.name}</span>
+    </button>` : '';
 
   document.getElementById('drawerLabel').textContent = 'Fiche membre';
   document.getElementById('drawerBody').innerHTML = `
-    <div class="drawer-hero">
-      ${memberAvatar(m, 72, 18, 24)}
-      <div>
-        <div class="drawer-name">${m.prenom} ${m.nom}</div>
-        <div class="drawer-sub">${m.role}</div>
-        <div class="drawer-badges">${orgBadge(org)}${pilierBadge(m.pilier)}</div>
-      </div>
+    <!-- Full-width photo header (breaks out of drawer-body padding with negative margins) -->
+    <div class="drawer-member-photo" style="background:${photoBg};margin:-24px -24px 20px">
+      ${m.photo
+        ? `<img src="${m.photo}" style="width:100%;height:220px;object-fit:cover;display:block" alt="">`
+        : `<div style="height:220px;width:100%;display:flex;align-items:center;justify-content:center;font-size:72px;font-weight:800;color:rgba(255,255,255,0.9)">${ini}</div>`
+      }
+    </div>
+
+    <div class="drawer-name">${m.prenom} ${m.nom}</div>
+    ${m.role ? `<div class="drawer-sub">${m.role}</div>` : ''}
+    <div class="drawer-badges" style="margin-top:10px;margin-bottom:20px">
+      ${orgBadgeHtml}
+      ${m.pilier ? pilierBadge(m.pilier) : ''}
     </div>
 
     <div class="drawer-section">
@@ -1449,12 +1485,12 @@ function openMemberDrawer(id) {
       ${m.email ? `
       <div class="drawer-field">
         <span class="drawer-field-label">Email</span>
-        <span class="drawer-field-value">${m.email}</span>
+        <span class="drawer-field-value"><a href="mailto:${m.email}">${m.email}</a></span>
       </div>` : ''}
       ${m.tel ? `
       <div class="drawer-field">
         <span class="drawer-field-label">Téléphone</span>
-        <span class="drawer-field-value">${m.tel}</span>
+        <span class="drawer-field-value"><a href="tel:${m.tel}">${m.tel}</a></span>
       </div>` : ''}
       ${m.statut ? `
       <div class="drawer-field">
@@ -1469,13 +1505,16 @@ function openMemberDrawer(id) {
         ${connections.length === 0
           ? `<p style="font-size:13px;color:var(--text-muted);font-weight:500">Aucune connexion renseignée.</p>`
           : connections.map(c => {
-              const co      = getOrg(c.membre.org);
-              const ls      = LINK_STYLES[c.type] || LINK_STYLES.collabore;
-              const avBg    = co ? co.color + '22' : '#dee8ff';
-              const avColor = co ? co.color : '#4647d3';
+              const co     = getOrg(c.membre.org);
+              const ls     = LINK_STYLES[c.type] || LINK_STYLES.collabore;
+              const avBg   = co?.color || '#4647d3';
+              const connIni = initials(c.membre.prenom, c.membre.nom);
+              const avatar = c.membre.photo
+                ? `<img src="${c.membre.photo}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid var(--border)" alt="">`
+                : `<div style="width:36px;height:36px;border-radius:50%;background:${avBg};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:white;flex-shrink:0">${connIni}</div>`;
               return `
                 <div class="connection-item" onclick="openMemberDrawer(${JSON.stringify(c.membre.id)})">
-                  <div class="mini-avatar" style="background:${avBg};color:${avColor}">${initials(c.membre.prenom, c.membre.nom)}</div>
+                  ${avatar}
                   <div class="connection-info">
                     <div class="connection-name">${c.membre.prenom} ${c.membre.nom}</div>
                     <div class="connection-type" style="color:${ls.color}">${ls.label}</div>
