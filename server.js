@@ -78,12 +78,19 @@ function mapOrganisation(page) {
 }
 function mapLien(page) {
   const p = page.properties;
+  const extractId = (val) => {
+    if (!val) return null;
+    const match = val.match(/([a-f0-9-]{32,36})$/);
+    return match ? match[1].replace(/-/g, "") : val.replace(/-/g, "");
+  };
+  const rawA = prop(p, "Membre A", "relation")?.[0] || null;
+  const rawB = prop(p, "Membre B", "relation")?.[0] || null;
   return {
     id: page.id,
     nom: prop(p, "Nom", "title"),
     type: prop(p, "Type de lien", "select"),
-    membreA: prop(p, "Membre A", "relation")?.[0] || null,
-    membreB: prop(p, "Membre B", "relation")?.[0] || null
+    membreA: extractId(rawA),
+    membreB: extractId(rawB)
   };
 }
 app.use(express.static(path.join(__dirname)));
