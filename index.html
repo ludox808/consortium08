@@ -1175,7 +1175,7 @@ function membreCard(m) {
     : '';
 
   return `
-    <div class="membre-card" onclick="openMemberDrawer(${JSON.stringify(m.id)})">
+    <div class="membre-card" onclick="openMemberDrawer('${m.id}')">
       <div class="mc-org-badges">${badgesHtml}</div>
       <div class="mc-photo" style="background:${photoBg}">
         ${photoContent}
@@ -1199,7 +1199,7 @@ function compactCard(m) {
   const bg = firstOrg?.color || '#3D3C52';
   const ini = initials(m.prenom, m.nom);
   return `
-    <div class="compact-card" onclick="openMemberDrawer(${JSON.stringify(m.id)})">
+    <div class="compact-card" onclick="openMemberDrawer('${m.id}')">
       <div class="compact-photo" style="background:${bg}">
         ${m.photo
           ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover" alt="">`
@@ -1301,14 +1301,14 @@ function renderOrgs() {
           const inner = m.photo
             ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover" alt="">`
             : `<span style="font-size:13px;font-weight:800;color:white">${ini}</span>`;
-          return `<div class="org-member-thumb" style="${!m.photo ? `background:${org.color}` : ''}" onclick="event.stopPropagation();openMemberDrawer(${JSON.stringify(m.id)})">${inner}</div>`;
+          return `<div class="org-member-thumb" style="${!m.photo ? `background:${org.color}` : ''}" onclick="event.stopPropagation();openMemberDrawer('${m.id}')">${inner}</div>`;
         }).join('')}</div>`
       : '';
 
     return `
       <div class="org-card-wrapper">
         <div class="org-card-inner" id="org-card-inner-${org.id}">
-          <div class="org-card-face org-card-front" onclick="openOrgDrawer(${JSON.stringify(org.id)})">
+          <div class="org-card-face org-card-front" onclick="openOrgDrawer('${org.id}')">
             <div class="org-card-header">
               ${logoHtml}
               <div class="org-card-title-wrap">
@@ -1425,7 +1425,7 @@ function renderLogigramme() {
       const inner = m.photo
         ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover" alt="">`
         : `<span style="font-size:11px;font-weight:800;color:white">${ini}</span>`;
-      return `<div class="org-node-avatar" style="${!m.photo ? `background:${org.color}` : ''}" onclick="event.stopPropagation();openMemberDrawer(${JSON.stringify(m.id)})" title="${m.prenom} ${m.nom}">${inner}</div>`;
+      return `<div class="org-node-avatar" style="${!m.photo ? `background:${org.color}` : ''}" onclick="event.stopPropagation();openMemberDrawer('${m.id}')" title="${m.prenom} ${m.nom}">${inner}</div>`;
     }).join('');
 
     const node = document.createElement('div');
@@ -1446,8 +1446,9 @@ function renderLogigramme() {
 // ══════════════════════════════════════════════
 
 function openMemberDrawer(id) {
+  console.log('[openMemberDrawer] id=', id);
   const m = getMembre(id);
-  if (!m) return;
+  if (!m) { console.warn('[openMemberDrawer] member not found for id=', id); return; }
   const org         = getOrg(m.org);
   const connections = getConnectedMembers(m.id);
   const ini         = initials(m.prenom, m.nom);
@@ -1455,7 +1456,7 @@ function openMemberDrawer(id) {
 
   // Clickable org badge with logo
   const orgBadgeHtml = org ? `
-    <button class="drawer-org-badge" onclick="openOrgDrawer(${JSON.stringify(org.id)})">
+    <button class="drawer-org-badge" onclick="openOrgDrawer('${org.id}')">
       ${org.logo
         ? `<img src="${org.logo}" class="drawer-org-badge-logo" alt="">`
         : `<div class="drawer-org-badge-abbr" style="background:${org.color}">${org.abbr}</div>`
@@ -1513,7 +1514,7 @@ function openMemberDrawer(id) {
                 ? `<img src="${c.membre.photo}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid var(--border)" alt="">`
                 : `<div style="width:36px;height:36px;border-radius:50%;background:${avBg};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:white;flex-shrink:0">${connIni}</div>`;
               return `
-                <div class="connection-item" onclick="openMemberDrawer(${JSON.stringify(c.membre.id)})">
+                <div class="connection-item" onclick="openMemberDrawer('${c.membre.id}')">
                   ${avatar}
                   <div class="connection-info">
                     <div class="connection-name">${c.membre.prenom} ${c.membre.nom}</div>
@@ -1577,7 +1578,7 @@ function openOrgDrawer(id) {
         ${orgMembres.length === 0
           ? `<p style="font-size:13px;color:var(--text-muted);font-weight:500">Aucun membre renseigné.</p>`
           : orgMembres.map(m => `
-              <div class="member-mini" onclick="openMemberDrawer(${JSON.stringify(m.id)})">
+              <div class="member-mini" onclick="openMemberDrawer('${m.id}')">
                 <div class="mini-avatar" style="background:${org.color}22;color:${org.color}">${initials(m.prenom, m.nom)}</div>
                 <div>
                   <div class="member-mini-name">${m.prenom} ${m.nom}</div>
