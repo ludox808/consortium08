@@ -326,9 +326,7 @@
       right: 10px;
       width: 64px;
       height: 64px;
-      border-radius: 9px;
-      object-fit: cover;
-      border: 2px solid rgba(255,255,255,0.4);
+      object-fit: contain;
     }
     .mc-logo-abbr {
       position: absolute;
@@ -336,14 +334,12 @@
       right: 10px;
       width: 64px;
       height: 64px;
-      border-radius: 9px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 14px;
       font-weight: 800;
       color: white;
-      border: 2px solid rgba(255,255,255,0.3);
     }
     .mc-body { padding: 14px 16px 16px; }
     .mc-name { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 4px; letter-spacing: -0.3px; }
@@ -1158,7 +1154,7 @@ function compactCard(m) {
           : `<div class="compact-initials">${ini}</div>`
         }
         ${firstOrg ? (firstOrg.logo
-          ? `<img style="position:absolute;bottom:4px;right:4px;width:64px;height:64px;border-radius:9px;object-fit:cover;border:2px solid rgba(255,255,255,0.4)" src="${firstOrg.logo}" alt="">`
+          ? `<img style="position:absolute;bottom:4px;right:4px;width:64px;height:64px;object-fit:contain" src="${firstOrg.logo}" alt="">`
           : `<div class="compact-org-chip" style="background:${firstOrg.color}">${firstOrg.abbr}</div>`) : ''}
       </div>
       <div class="compact-name">${m.prenom} ${m.nom}</div>
