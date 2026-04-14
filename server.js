@@ -53,7 +53,7 @@ async function queryDB(id, token) {
 function mapMembre(page) {
   const p = page.properties;
   return {
-    id: page.id,
+    id: page.id.replace(/-/g, ""),
     nom: prop(p, "Nom", "title"),
     fonction: prop(p, "Fonction", "rich_text"),
     email: prop(p, "Email", "email"),
@@ -66,7 +66,7 @@ function mapMembre(page) {
 function mapOrganisation(page) {
   const p = page.properties;
   return {
-    id: page.id,
+    id: page.id.replace(/-/g, ""),
     nom: prop(p, "Nom", "title"),
     typeDeStructure: prop(p, "Type de structure", "select"),
     pilier: prop(p, "Pilier", "select"),
@@ -87,7 +87,7 @@ function mapLien(page) {
   const rawA = prop(p, "Membre A", "relation")?.[0] || null;
   const rawB = prop(p, "Membre B", "relation")?.[0] || null;
   return {
-    id: page.id,
+    id: page.id.replace(/-/g, ""),
     nom: prop(p, "Nom", "title"),
     type: prop(p, "Type de lien", "select"),
     membreA: extractId(rawA),
