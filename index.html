@@ -556,7 +556,7 @@
       position: fixed;
       top: 0;
       right: 0;
-      width: 390px;
+        width: min(80vw, 860px);
       height: 100%;
       background: var(--surface);
       box-shadow: -8px 0 48px rgba(36,47,65,0.12);
@@ -1207,7 +1207,7 @@ function renderOrgs() {
             </div>
             <div class="org-card-badges">${pilierBadgeHtml}${roleHtml}${typeHtml}</div>
             ${missionFront}
-                <button class="org-flip-btn" onclick="flipOrgCard(event, '${org.id}')">↺ Lire la mission complète</button>
+                <button class="org-flip-btn" onclick="event.stopPropagation(); openOrgDrawer('${org.id}')">↺ Lire la mission complète</button>
           </div>
           <div class="org-card-face org-card-back">
                 <button class="org-back-btn" onclick="flipOrgCard(event, '${org.id}')">← Retour</button>
