@@ -1582,8 +1582,8 @@ function mapMembresData(raw, orgMap) {
 
 function mapLiensData(raw) {
   return raw
-    .filter(l => Array.isArray(l.source) && l.source.length && Array.isArray(l.cible) && l.cible.length)
-    .map(l => ({ from: l.source[0], to: l.cible[0], type: mapLinkType(l.type) }))
+    .filter(l => l.membreA && l.membreB)
+    .map(l => ({ from: l.membreA, to: l.membreB, type: mapLinkType(l.type) }))
     .filter(l => l.from !== l.to);
 }
 
