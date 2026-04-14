@@ -775,8 +775,8 @@
     #menuToggle { display: none; }
     @media (max-width: 768px) {
       #menuToggle { display: block !important; }
-      .sidebar { display: none; }
-      .sidebar.open { display: block; }
+        .sidebar { display: none; position: relative; width: 100%; height: auto; top: auto; left: auto; }
+        .sidebar.open { display: flex; flex-direction: column; }
 
       .app-layout { flex-direction: column; }
       .sidebar {
