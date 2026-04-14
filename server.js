@@ -56,9 +56,9 @@ function mapMembre(page) {
     nom: prop(p, "Nom", "title"),
     fonction: prop(p, "Fonction", "rich_text"),
     email: prop(p, "Email", "email"),
-    telephone: prop(p, "Telephone", "phone_number"),
+    telephone: prop(p, "Téléphone", "phone_number"),
     photo: prop(p, "Photo", "files"),
-    organisationLiee: prop(p, "Organisation liee", "relation"),
+    organisationLiee: prop(p, "Organisation liée", "relation"),
     statut: prop(p, "Statut", "select")
   };
 }
