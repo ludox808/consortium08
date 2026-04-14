@@ -771,7 +771,29 @@
       box-shadow: 0 8px 24px rgba(192,32,32,0.1);
       text-align: center;
     }
-  </style>
+  
+    @media (max-width: 768px) {
+      .app-layout { flex-direction: column; }
+      .sidebar {
+        width: 100% !important;
+        border-radius: 0;
+        padding: 12px 16px;
+        border-right: none;
+        border-bottom: 1px solid var(--surface-container);
+      }
+      .sidebar-section { margin-bottom: 8px; }
+      .sidebar-filters { display: flex; flex-wrap: wrap; gap: 6px; }
+      .sidebar-item { padding: 6px 10px; font-size: 13px; }
+      .main-content { padding: 16px; }
+      .navbar { padding: 0 16px; border-radius: 0; }
+      .navbar-logo { font-size: 15px; }
+      .orgs-grid { grid-template-columns: 1fr !important; }
+      .org-card-wrapper { height: auto; min-height: 320px; }
+      .members-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .drawer { width: 100% !important; }
+      .log-canvas { height: 400px; }
+    }
+</style>
 </head>
 <body>
 
