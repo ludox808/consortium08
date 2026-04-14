@@ -41,6 +41,7 @@ async function queryDB(id, token) {
     });
     if (!resp.ok) {
       const text = await resp.text();
+      console.error("NOTION ERROR", resp.status, text);
       throw new Error("Notion API error " + resp.status + ": " + text);
     }
     const data = await resp.json();
