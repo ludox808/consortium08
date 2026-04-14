@@ -1592,6 +1592,8 @@ function mapOrgsData(raw) {
   }));
 }
 
+const normalizeId = id => id ? id.replace(/-/g, '') : '';
+
 function splitNom(nom) {
   if (!nom || !nom.trim()) return { prenom: 'Inconnu', nom: '' };
   const parts = nom.trim().split(/\s+/);
@@ -1612,7 +1614,7 @@ function mapLinkType(type) {
 function mapMembresData(raw, orgMap) {
   return raw.map(m => {
     const { prenom, nom } = splitNom(m.nom);
-    const orgIds = Array.isArray(m.organisationLiee) ? m.organisationLiee : [];
+    const orgIds = (Array.isArray(m.organisationLiee) ? m.organisationLiee : []).map(normalizeId);
     const orgId = orgIds[0] || null;
     const org = orgId ? orgMap[orgId] : null;
     return {
@@ -1705,7 +1707,7 @@ async function initApp() {
     ORGS = mapOrgsData(data.organisations || []);
     setStep('orgs', 'done');
 
-    const orgMap = Object.fromEntries(ORGS.map(o => [o.id, o]));
+    const orgMap = Object.fromEntries(ORGS.map(o => [normalizeId(o.id), o]));
     MEMBRES = mapMembresData(data.members || [], orgMap);
     computeLogPositions(MEMBRES);
     setStep('membres', 'done');
