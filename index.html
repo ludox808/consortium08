@@ -318,14 +318,14 @@
       justify-content: center;
       overflow: hidden;
     }
-    .mc-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .mc-photo img:not(.mc-logo) { width: 100%; height: 100%; object-fit: cover; }
     .mc-initials { font-size: 52px; font-weight: 800; color: rgba(255,255,255,0.9); }
     .mc-logo {
       position: absolute;
       bottom: 10px;
       right: 10px;
-      width: 32px;
-      height: 32px;
+      width: 64px;
+      height: 64px;
       border-radius: 9px;
       object-fit: cover;
       border: 2px solid rgba(255,255,255,0.4);
@@ -334,13 +334,13 @@
       position: absolute;
       bottom: 10px;
       right: 10px;
-      width: 32px;
-      height: 32px;
+      width: 64px;
+      height: 64px;
       border-radius: 9px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 9px;
+      font-size: 14px;
       font-weight: 800;
       color: white;
       border: 2px solid rgba(255,255,255,0.3);
@@ -375,18 +375,18 @@
     .compact-initials { font-size: 22px; font-weight: 800; color: rgba(255,255,255,0.9); }
     .compact-org-chip {
       position: absolute;
-      bottom: 5px;
-      right: 5px;
-      width: 22px;
-      height: 22px;
-      border-radius: 6px;
+      bottom: 4px;
+      right: 4px;
+      width: 64px;
+      height: 64px;
+      border-radius: 9px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 7px;
+      font-size: 14px;
       font-weight: 800;
       color: white;
-      border: 1.5px solid rgba(255,255,255,0.35);
+      border: 2px solid rgba(255,255,255,0.35);
     }
     .compact-name { font-size: 11px; font-weight: 700; color: var(--text); text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
@@ -1104,7 +1104,7 @@ function membreCard(m) {
   const orgIds = m.orgs && m.orgs.length ? m.orgs : (m.org ? [m.org] : []);
   const orgs = orgIds.map(id => getOrg(id)).filter(Boolean);
   const firstOrg = orgs[0] || null;
-  const photoBg = pilierColor(firstOrg?.pilier || '');
+  const photoBg = firstOrg?.color || '#3D3C52';
   const connCount = getConnectedMembers(m.id).length;
   const ini = initials(m.prenom, m.nom);
 
@@ -1148,7 +1148,7 @@ function membreCard(m) {
 function compactCard(m) {
   const orgIds = m.orgs && m.orgs.length ? m.orgs : (m.org ? [m.org] : []);
   const firstOrg = orgIds.map(id => getOrg(id)).find(Boolean) || null;
-  const bg = pilierColor(firstOrg?.pilier || '');
+  const bg = firstOrg?.color || '#3D3C52';
   const ini = initials(m.prenom, m.nom);
   return `
     <div class="compact-card" onclick="openMemberDrawer(${JSON.stringify(m.id)})">
@@ -1158,7 +1158,7 @@ function compactCard(m) {
           : `<div class="compact-initials">${ini}</div>`
         }
         ${firstOrg ? (firstOrg.logo
-          ? `<img style="position:absolute;bottom:4px;right:4px;width:20px;height:20px;border-radius:5px;object-fit:cover;border:1.5px solid rgba(255,255,255,0.4)" src="${firstOrg.logo}" alt="">`
+          ? `<img style="position:absolute;bottom:4px;right:4px;width:64px;height:64px;border-radius:9px;object-fit:cover;border:2px solid rgba(255,255,255,0.4)" src="${firstOrg.logo}" alt="">`
           : `<div class="compact-org-chip" style="background:${firstOrg.color}">${firstOrg.abbr}</div>`) : ''}
       </div>
       <div class="compact-name">${m.prenom} ${m.nom}</div>
